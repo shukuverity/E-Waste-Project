@@ -299,8 +299,28 @@ body {
   margin-bottom: 15px; /* Puts vertical spacing between the rows */
 }
 
-.form-row-container {
-  display: flex;
-  margin-bottom: 15px; /* Puts vertical spacing between the rows */
-  gap: 55px; /* Vertical spacing between each row */
+label {
+      font-size: 12px;
+      color: #0a0a0b;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
 }
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cbd5e0;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #050506;
+    transition: border-color 0.2s ease-in-out;
+}
+
+.item-type, .quantity, .condition, .weight {
+    flex: 1; /* Each input takes equal space */
+    display: flex;
+    flex-direction: column;
+}   
+
