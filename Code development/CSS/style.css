@@ -1,0 +1,306 @@
+/* ==========================================
+   1. GLOBAL RESET & BASE STYLES
+   ========================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    background-color: #f9f9f9;
+    overflow-x: hidden;
+}
+
+/* ==========================================
+   2. KEYFRAME ANIMATIONS (The Fading Effects)
+   ========================================== */
+/* Smooth background fade and subtle drift upward */
+@keyframes backgroundFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(1.02); /* Starts slightly zoomed for a smooth settling effect */
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Staggered entry for typography elements */
+@keyframes contentFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==========================================
+   3. HERO BANNER & CANVAS LAYOUT
+   ========================================== */
+.hero-section {
+    position: relative;
+    width: 100%;
+    min-height: 100vh; /* Takes up full browser window height */
+    
+    /* Image setup */
+    background-image: url('reuse.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center bottom; /* Pins the earth vector elements to the bottom edge */
+    
+    /* Layout control */
+    display: flex;
+    flex-direction: column;
+    
+    /* Apply initial background fade */
+    animation: backgroundFadeIn 1.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* ==========================================
+   4. NAVIGATION STYLING
+   ========================================== */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 60px;
+    
+    
+    /* Keep navbar hidden initially, fade it in smoothly */
+    opacity: 0;
+    animation: contentFadeIn 1.2s ease-out forwards;
+    animation-delay: 0.5s; /* Waits for background animation to start first */
+}
+
+.navbar .logo {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1b5e20;
+    letter-spacing: -0.5px;
+}
+
+.navbar .nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+    font-size: 16px;
+    margin-left: 35px;
+    transition: color 0.3s ease;
+}
+
+.navbar .nav-links a:hover {
+    color: #2e7d32;
+}
+
+/* ==========================================
+   5. CENTRAL TEXT CONTENT OVERLAY
+   ========================================== */
+.hero-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+    margin-bottom: 5px; /* Shifts text upwards slightly so it doesn't overlap the graphics */
+    
+    /* Fade text in last */
+    opacity: 0;
+    animation: contentFadeIn 1.4s ease-out forwards;
+    animation-delay: 0.9s; 
+}
+
+.hero-content h1 {
+    font-size: 48px;
+    font-weight: 800;
+    color: #1b5e20;
+    margin-bottom: 20px;
+    letter-spacing: -1px;
+}
+
+.hero-content p {
+    font-size: 19px;
+    color: #444;
+    max-width: 650px;
+    line-height: 1.6;
+    margin-bottom: 35px;
+}
+
+/* Call To Action Button */
+.hero-content .cta-button {
+    display: inline-block;
+    background-color: #2e7d32;
+    color: white;
+    text-decoration: none;
+    padding: 14px 36px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 16px;
+    box-shadow: 0 4px 15px rgba(46, 125, 50, 0.2);
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.hero-content .cta-btn:hover {
+    background-color: #1b5e20;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(27, 94, 32, 0.3);
+}
+
+/* e-waste dashboard*/
+
+/*.dashboard-content {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    position: relative;
+    width: 100%;
+    min-height: 100vh; /* Takes up full browser window height */
+    
+    /* Image setup 
+    background-image: url('reuse.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center bottom; /* Pins the earth vector elements to the bottom edge */
+    
+    /* Layout control 
+    
+    flex-direction: column;
+    padding: 30px 35px;
+}
+
+.panel-header {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: rgba(255, 255, 255, 0.913);
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}*/
+
+/* Container Box Configuration */
+
+body {
+    background-image: url('reuse.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center bottom; /* Pins the earth vector elements to the bottom edge */
+    background-attachment: fixed; /* Keeps the background image fixed during scroll */
+}
+.dashboard-content {
+    background-color: #ffffff;
+    max-width: 550px;
+    margin: 40px auto;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+    font-family: 'Segoe UI', -apple-system, sans-serif;
+}
+
+/* Panel Header */
+.panel-header h2 {
+    font-size: 18px;
+    color: #4a5568;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+/* Points Layout styling */
+.points-display {
+    margin-bottom: 15px;
+}
+
+.points-display .current-pts {
+    font-size: 48px;
+    font-weight: 800;
+    color: #1a202c;
+    letter-spacing: -1px;
+}
+
+.points-display .pts-label {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2e7d32; /* Accent Green */
+    margin-left: 4px;
+}
+
+/* Sub-stats Text Rows */
+.points-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #718096;
+    margin-bottom: 12px;
+}
+
+.points-stats strong {
+    color: #2d3748;
+}
+
+/* Progress Bar Track */
+.progress-container {
+    width: 100%;
+    height: 14px;
+    background-color: #edf2f7;
+    border-radius: 7px;
+    overflow: hidden;
+    margin-bottom: 25px;
+    border: 1px solid #e2e8f0;
+}
+
+/* Inner Filled Progress Bar */
+.progress-bar {
+    height: 100%;
+    background-color: #2e7d32; /* Matches the theme palette */
+    border-radius: 7px;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Interactive Action Button */
+.redeem-btn, .submit-btn {
+    width: 100%;
+    background-color: transparent;
+    color: #2e7d32;
+    border: 2px solid #2e7d32;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Button Hover State Animation */
+.redeem-btn:hover, .submit-btn:hover {
+    background-color: #2e7d32;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(46, 125, 50, 0.15);
+}
+
+/* Arrow Vector Sizing */
+.arrow-icon {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.2s ease-in-out;
+*/}
+
+.form-row {
+  display: flex;
+  gap: 20px;          /* Puts spacing between the left and right column */
+  margin-bottom: 15px; /* Puts vertical spacing between the rows */
+}
+
+.form-row-container {
+  display: flex;
+  margin-bottom: 15px; /* Puts vertical spacing between the rows */
+  gap: 55px; /* Vertical spacing between each row */
+}
