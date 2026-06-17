@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-waste Platform Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="dashboard-header">
+        <h1 style="text-align: center; color: #ffffff;">E-waste Platform Dashboard</h1>
+        <!--<nav class="dashboard-nav">
+            <a href="#">Home</a>
+            <a href="#">Profile</a>
+            <a href="#">Settings</a>
+            <a href="#">Logout</a>
+        </nav>-->
+    </header>
+
+    <!--page container-->
+    <main>
+
+    <div class="dashboard-content">
+        <div class="panel-header">
+            <h2>Your Points</h2>
+        </div>
+        
+        <div class="points-display">
+            <span class="current-pts">1,250</span><span class="pts-label">pts</span>
+        </div>
+        
+        <div class="points-stats">
+            <span class="stat-item">Total earned: <strong>2,000</strong></span>
+            <span class="stat-item">Redeemed: <strong>750</strong></span>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar" style="width: 62.5%;"></div>
+        </div>
+
+        <button class="redeem-btn">
+            REDEEM POINTS
+            <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+        </button>  
+    </div>
+
+    <div class="dashboard-content">
+        <div class="panel-header">
+            <h2> ♻️ Quick Disposal</h2>
+    </div>
+    <div class="form-row">
+        <div class="item-type">
+            <label for="device-type">Select device type:</label>
+            <select id="device-type" name="device-type">
+                <option value="smartphone">Smartphone</option>
+                <option value="laptop">Laptop</option>
+                <option value="tablet">Tablet</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+
+        <div class="quantity">
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" min="1" value="1">
+        </div>
+    </div>
+
+    <div class="form-row-container">
+        <div class="condition">
+            <label for="condition">Condition:</label>
+            <select id="condition" name="condition">
+                <option value="working">Working</option>
+                <option value="not-working">Not Working</option>
+                <option value="damaged">Damaged</option>
+            </select>
+        </div>
+
+        <div class="weight">
+            <label for="weight">Weight (kg):</label>
+            <input type="number" id="weight" name="weight" min="0.1" step="0.1" value="0.1">
+        </div>
+    </div>
+
+         <button class="submit-btn">
+            SUBMIT WASTE
+        </button>
+    </div>
+
+    <div class="dashboard-content">
+        <div class="panel-header">
+            <h2>Recent Activity</h2>
+        </div>
+        <div class="activity-stats">
+        <ul class="activity-list">
+            <li class="activity-item">
+                <span class="activity-date">2026-06-01</span>
+                <span class="activity-description">Submitted 2 smartphones for recycling (Working condition)</span>
+                <span class="activity-points">+500 pts</span>
+            </li>
+            <li class="activity-item">
+                <span class="activity-date">2026-05-20</span>
+                <span class="activity-description">Redeemed points for a $25 gift card</span>
+                <span class="activity-points">-750 pts</span>
+            </li>
+            <li class="activity-item">
+                <span class="activity-date">2026-05-10</span>
+                <span class="activity-description">Submitted 1 laptop for recycling (Not working)</span>
+                <span class="activity-points">+300 pts</span>
+            </li>
+        </ul>
+    </div>
+
+</main>
+
+    
+</body>
+</html>
