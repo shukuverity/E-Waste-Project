@@ -49,7 +49,7 @@ body {
     min-height: 100vh; /* Takes up full browser window height */
     
     /* Image setup */
-    background-image: url('reuse.jpg');
+    background-image: url('../images/reuse.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center bottom; /* Pins the earth vector elements to the bottom edge */
@@ -162,7 +162,7 @@ body {
     min-height: 100vh; /* Takes up full browser window height */
     
     /* Image setup 
-    background-image: url('reuse.jpg');
+    background-image: url('../images/reuse.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center bottom; /* Pins the earth vector elements to the bottom edge */
@@ -185,7 +185,7 @@ body {
 /* Container Box Configuration */
 
 body {
-    background-image: url('reuse.jpg');
+    background-image: url('../images/reuse.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center bottom; /* Pins the earth vector elements to the bottom edge */
@@ -303,4 +303,162 @@ body {
   display: flex;
   margin-bottom: 15px; /* Puts vertical spacing between the rows */
   gap: 55px; /* Vertical spacing between each row */
+}
+
+/* Admin dashboard page styling */
+.admin-page .dashboard-container {
+    width: min(1200px, 94%);
+    margin: 30px auto 50px;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+.admin-page .admin-sidebar {
+    margin: 0;
+    position: sticky;
+    top: 24px;
+}
+
+.admin-page .admin-info-box,
+.admin-page .approval-card,
+.admin-page .stat-card {
+    border: 1px solid #d7e4d2;
+    border-left: 5px solid #2e7d32;
+    border-radius: 10px;
+    background-color: #f8fff8;
+    padding: 14px;
+}
+
+.admin-page .admin-info-box {
+    margin: 10px 0 16px;
+}
+
+.admin-page .admin-info-box .panel-header {
+    margin-bottom: 12px;
+}
+
+.admin-page .admin-info-box .submit-btn {
+    margin-top: 12px;
+}
+
+.admin-page .live-status {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background-color: #e7f6e7;
+    color: #1b5e20;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.admin-page .admin-nav-links {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    margin-bottom: 16px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+}
+
+.admin-page .admin-nav-links a {
+    text-decoration: none;
+    color: #2d3748;
+    font-weight: 600;
+    white-space: nowrap;
+    padding: 9px 16px;
+    border-radius: 999px;
+    border: 1px solid #c7d9c2;
+    background-color: #f2faf2;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.admin-page .admin-nav-links a:hover {
+    background-color: #2e7d32;
+    color: #ffffff;
+}
+
+.admin-page .admin-main .dashboard-content {
+    max-width: 100%;
+    margin: 0 0 24px;
+}
+
+.admin-page .admin-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.admin-page .admin-panel-header span {
+    font-size: 13px;
+    font-weight: 700;
+    color: #2e7d32;
+    background-color: #e7f6e7;
+    padding: 5px 10px;
+    border-radius: 999px;
+}
+
+.admin-page .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(140px, 1fr));
+    gap: 14px;
+}
+
+.admin-page .stat-card h3 {
+    color: #1a202c;
+    margin-bottom: 4px;
+}
+
+.admin-page .stat-card p {
+    color: #4a5568;
+    margin-bottom: 8px;
+}
+
+.admin-page .trend {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #2e7d32;
+}
+
+.admin-page .approval-list {
+    display: grid;
+    gap: 12px;
+}
+
+.admin-page .approval-card p {
+    margin-bottom: 6px;
+    color: #2d3748;
+}
+
+.admin-page .pending {
+    color: #975a16;
+    font-weight: 700;
+    background-color: #fefcbf;
+    padding: 2px 8px;
+    border-radius: 999px;
+}
+
+.admin-page .btn-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+@media (max-width: 900px) {
+    .admin-page .dashboard-container {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-page .admin-sidebar {
+        position: static;
+    }
+
+    .admin-page .stats-grid {
+        grid-template-columns: repeat(2, minmax(160px, 1fr));
+    }
 }

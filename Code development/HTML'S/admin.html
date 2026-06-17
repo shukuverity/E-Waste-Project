@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="../CSS/style.css">
+</head>
+<body class="admin-page">
+    <header class="dashboard-header">
+        <h1 style="text-align: center; color: #ffffff;">E-waste Platform Admin Dashboard</h1>
+    </header>
+
+    <main class="dashboard-container">
+        <aside class="admin-sidebar">
+            <div class="admin-info-box">
+                <div class="panel-header">
+                    <h2>Admin Portal</h2>
+                </div>
+                <p><strong>John Mangi</strong></p>
+                <p>Role: Administrator</p>
+                <span class="live-status">Live</span>
+                <button class="submit-btn">Logout</button>
+            </div>
+
+            <nav class="admin-nav-links" aria-label="Admin navigation">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="recycler_dashbboard.html">Recycler</a>
+                <a href="schedule_pickup.html">Pickups</a>
+                <a href="signup.html">Users</a>
+                <a href="admin.html">Reports</a>
+            </nav>
+        </aside>
+
+        <section class="admin-main">
+            <div class="dashboard-content">
+                <div class="panel-header admin-panel-header">
+                    <h2>Overview</h2>
+                    <span>June 2026</span>
+                </div>
+
+                <div class="stats-grid">
+                    <article class="stat-card">
+                        <h3>15</h3>
+                        <p>Active recyclers certified</p>
+                        <span class="trend">+23%</span>
+                    </article>
+
+                    <article class="stat-card">
+                        <h3>12,450 kg</h3>
+                        <p>Total e-waste collected</p>
+                        <span class="trend">+18%</span>
+                    </article>
+
+                    <article class="stat-card">
+                        <h3>45,200</h3>
+                        <p>Points awarded this month</p>
+                        <span class="trend">+1%</span>
+                    </article>
+
+                    <article class="stat-card">
+                        <h3>94%</h3>
+                        <p>Compliance rate (NEMA)</p>
+                        <span class="trend">On target</span>
+                    </article>
+                </div>
+            </div>
+
+            <div class="dashboard-content">
+                <div class="panel-header admin-panel-header">
+                    <h2>Pending Approvals</h2>
+                    <span>3 pending</span>
+                </div>
+
+                <div class="approval-list">
+                    <article class="approval-card">
+                        <p><strong>GreenTech</strong></p>
+                        <p>NEMA-001 | 2026-05-20</p>
+                        <p>Status: <span class="pending">Pending</span></p>
+                        <div class="btn-group">
+                            <button class="submit-btn">Validate</button>
+                            <button class="submit-btn">Approve</button>
+                        </div>
+                    </article>
+
+                    <article class="approval-card">
+                        <p><strong>EcoCycle</strong></p>
+                        <p>NEMA-002 | 2026-05-07</p>
+                        <p>Status: <span class="pending">Pending</span></p>
+                        <div class="btn-group">
+                            <button class="submit-btn">Validate</button>
+                            <button class="submit-btn">Approve</button>
+                        </div>
+                    </article>
+
+                    <article class="approval-card">
+                        <p><strong>RecycleHub</strong></p>
+                        <p>NEMA-003 | 2026-05-18</p>
+                        <p>Status: <span class="pending">Pending</span></p>
+                        <div class="btn-group">
+                            <button class="submit-btn">Validate</button>
+                            <button class="submit-btn">Approve</button>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
