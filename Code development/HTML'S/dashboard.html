@@ -6,97 +6,178 @@
     <title>E-waste Platform Dashboard</title>
     <link rel="stylesheet" href="../CSS/style.css">
 </head>
-<body>
-    <header class="dashboard-header">
+<body class="admin-page">
+    <header class="dashboard-header admin-topbar">
+        <button class="modules-toggle-btn" id="modules-toggle" aria-expanded="false" aria-controls="admin-modules-menu" aria-label="Toggle main menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
         <h1 style="text-align: center; color: #ffffff;">E-waste Platform Dashboard</h1>
-        <!--<nav class="dashboard-nav">
-            <a href="#">Home</a>
-            <a href="#">Profile</a>
-            <a href="#">Settings</a>
-            <a href="#">Logout</a>
-        </nav>-->
     </header>
 
-    <!--page container-->
+    <aside class="admin-sidebar" id="admin-modules-menu">
+        <p class="sidebar-section-title">Main Menu</p>
+        <nav class="admin-nav-links" aria-label="Main navigation">
+            <a href="#points">Points</a>
+            <a href="#waste-request">Waste Request</a>
+            <a href="#pickup-tracking">Pickup Tracking</a>
+            <a href="#find-recycler">Find Recycler</a>
+            <a href="admin.html">Admin</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </aside>
+
     <main>
+        <div class="dashboard-content" id="points">
+            <div class="panel-header">
+                <h2>Points</h2>
+            </div>
 
-    <div class="dashboard-content">
-        <div class="panel-header">
-            <h2>Your Points</h2>
-        </div>
-        
-        <div class="points-display">
-            <span class="current-pts">1,250</span><span class="pts-label">pts</span>
-        </div>
-        
-        <div class="points-stats">
-            <span class="stat-item">Total earned: <strong>2,000</strong></span>
-            <span class="stat-item">Redeemed: <strong>750</strong></span>
-        </div>
-        <div class="progress-container">
-            <div class="progress-bar" style="width: 62.5%;"></div>
-        </div>
+            <div class="points-display">
+                <span class="current-pts" id="current-points">1,250</span><span class="pts-label">pts</span>
+            </div>
 
-        <button class="redeem-btn">
-            REDEEM POINTS
-            <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-        </button>  
-    </div>
+            <div class="points-stats">
+                <span class="stat-item">Total earned: <strong id="total-earned">2,000</strong></span>
+                <span class="stat-item">Redeemed: <strong id="redeemed-points">750</strong></span>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar" id="points-progress" style="width: 62.5%;"></div>
+            </div>
 
-    <div class="dashboard-content">
-        <div class="panel-header">
-            <h2> ♻️ Quick Disposal</h2>
-    </div>
-    <div class="form-row">
-        <div class="item-type">
-            <label for="device-type">Select device type:</label>
-            <select id="device-type" name="device-type">
-                <option value="smartphone">Smartphone</option>
-                <option value="laptop">Laptop</option>
-                <option value="tablet">Tablet</option>
-                <option value="other">Other</option>
-            </select>
+            <button class="redeem-btn">
+                REDEEM POINTS
+                <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </button>
         </div>
 
-        <div class="quantity">
-            <label for="quantity">Quantity:</label>
-            <input type="number" id="quantity" name="quantity" min="1" value="1">
+        <div class="dashboard-content" id="waste-request">
+            <div class="panel-header">
+                <h2>Waste Request Form</h2>
+            </div>
+
+            <form id="waste-request-form" action="#" method="post">
+                <div class="form-row">
+                    <div class="item-type">
+                        <label for="device-type">Select device type:</label>
+                        <select id="device-type" name="device-type">
+                            <option value="smartphone">Smartphone</option>
+                            <option value="laptop">Laptop</option>
+                            <option value="tablet">Tablet</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="quantity">
+                        <label for="quantity">Quantity:</label>
+                        <input type="number" id="quantity" name="quantity" min="1" value="1">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="condition">
+                        <label for="condition">Condition:</label>
+                        <select id="condition" name="condition">
+                            <option value="working">Working</option>
+                            <option value="not-working">Not Working</option>
+                            <option value="damaged">Damaged</option>
+                        </select>
+                    </div>
+                    <div class="weight">
+                        <label for="pickup-date">Pickup Date</label>
+                        <input type="date" id="pickup-date" name="pickup-date" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="item-type">
+                        <label for="pickup-location">Pickup Location</label>
+                        <input type="text" id="pickup-location" name="pickup-location" placeholder="Enter location" required>
+                    </div>
+                    <div class="quantity">
+                        <label for="pickup-time">Preferred Time</label>
+                        <select id="pickup-time" name="pickup-time" required>
+                            <option value="">Select time slot</option>
+                            <option>09:00 - 11:00</option>
+                            <option>11:00 - 13:00</option>
+                            <option>14:00 - 16:00</option>
+                            <option>16:00 - 18:00</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="item-type">
+                        <label for="waste-weight">Weight (kg)</label>
+                        <input type="number" id="waste-weight" name="waste-weight" min="0.1" step="0.1" placeholder="Enter estimated weight in kg" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="item-type">
+                        <label for="request-message">Request Details</label>
+                        <textarea id="request-message" name="request-message" rows="3" placeholder="Describe item categories, quantities, and timelines"></textarea>
+                    </div>
+                </div>
+
+                <button class="submit-btn" type="submit">SUBMIT REQUEST</button>
+            </form>
         </div>
-    </div>
 
-    <div class="form-row">
-        <div class="condition">
-            <label for="condition">Condition:</label>
-            <select id="condition" name="condition">
-                <option value="working">Working</option>
-                <option value="not-working">Not Working</option>
-                <option value="damaged">Damaged</option>
-            </select>
+        <div class="dashboard-content" id="pickup-tracking">
+            <div class="panel-header">
+                <h2>Pickup Tracking</h2>
+            </div>
+
+            <div class="tracking-meta">
+                <span>Request ID: <strong id="tracking-request-id">No request yet</strong></span>
+                <span>Status: <span class="tracking-live-status" id="tracking-live-status">No active request</span></span>
+            </div>
+
+            <div class="tracking-actions">
+                <button class="submit-btn" type="button" id="advance-status-btn">Advance Status</button>
+                <button class="submit-btn" type="button" id="remove-request-btn">Remove Request</button>
+            </div>
+            <p class="tracking-note" id="tracking-note">Submit a waste request to start tracking.</p>
         </div>
 
-        <div class="weight">
-            <label for="weight">Weight (kg):</label>
-            <input type="number" id="weight" name="weight" min="0.1" step="0.1" value="0.1">
+        <div class="dashboard-content" id="find-recycler">
+            <div class="panel-header">
+                <h2>Find Recycler</h2>
+            </div>
+
+            <form id="recycler-search-form" action="#" method="post">
+                <div class="form-row">
+                    <div class="item-type">
+                        <label for="recycler-location">Location</label>
+                        <input type="text" id="recycler-location" name="recycler-location" placeholder="Enter your town or county">
+                    </div>
+                    <div class="quantity">
+                        <label for="recycler-type">Recycler Type</label>
+                        <select id="recycler-type" name="recycler-type">
+                            <option value="">All recyclers</option>
+                            <option>Household e-waste</option>
+                            <option>Business e-waste</option>
+                            <option>Batteries and power units</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="submit-btn" type="submit">SEARCH RECYCLER</button>
+            </form>
+
+            <div class="points-stats recycler-results" id="recycler-results" aria-live="polite">
+                <span><strong>WEEE Centre:</strong> Nairobi | Rating 4.5</span>
+                <span><strong>CFSK:</strong> Nakuru | Rating 4.2</span>
+                <span><strong>EACR:</strong> Kisumu | Rating 4.0</span>
+            </div>
         </div>
-    </div>
 
-         <button class="submit-btn">
-            SUBMIT WASTE
-        </button>
-    </div>
-
-    <div class="dashboard-content">
-        <div class="panel-header">
-            <h2>Recent Activity</h2>
-        </div>
-        
-    </div>
-
-</main>
-
-    
+    </main>
+    <script src="../Java/dashboard.js"></script>
 </body>
 </html>
