@@ -6,62 +6,55 @@
 	<title>Sign Up | E-waste Platform</title>
 	<link rel="stylesheet" href="../CSS/style.css">
 </head>
-<body class="admin-page">
-	<header class="dashboard-header admin-topbar">
-		<h1 style="color: #ffffff;">Create Account</h1>
-	</header>
+<main class="container">
+	<div class="card" style="max-width: 700px; margin: auto;">
+		<h1>Create Account</h1>
 
-	<main class="dashboard-container">
-		<section class="admin-main">
-			<div class="dashboard-content">
-				<div class="panel-header admin-panel-header">
-					<h2>Registration</h2>
-					<span>Join the platform</span>
+		<form>
+			<div class="grid-container">
+				<div>
+					<label for="full-name">Full Name</label>
+					<input type="text" placeholder="Enter full name" required>
 				</div>
 
-				<form action="#" method="post">
-					<div class="form-row">
-						<div class="item-type">
-							<label for="full-name">Full Name</label>
-							<input type="text" id="full-name" name="full-name" placeholder="Enter full name" required>
-						</div>
-						<div class="quantity">
-							<label for="email">Email Address</label>
-							<input type="email" id="email" name="email" placeholder="Enter email" required>
-						</div>
-					</div>
+				<div>
+					<label for="email">Email Address</label>
+					<input type="email" placeholder="Enter email" required>
+				</div>
+				
+				<div>
+					<label>Phone Number</label>
+					<input type="tel" placeholder="Enter phone number" required>
+				</div>
+						
+				<div>
+					<label>Role</label>
+					<select id="role" name="role" required>
+						<option>User</option>
+						<option>Recycler</option>
+						<option>Admin Personnel</option>
+					</select>
+				</div>
 
-					<div class="form-row">
-						<div class="condition">
-							<label for="phone">Phone Number</label>
-							<input type="tel" id="phone" name="phone" placeholder="Enter phone number" required>
-						</div>
-						<div class="weight">
-							<label for="role">Account Type</label>
-							<select id="role" name="role" required>
-								<option value="">Select role</option>
-								<option>User</option>
-								<option>Recycler</option>
-								<option>Auditor</option>
-							</select>
-						</div>
-					</div>
+				<div>
+					<label>Password</label>
+					<input type="password" placeholder="Create password" required>
+				</div>
 
-					<div class="form-row">
-						<div class="item-type">
-							<label for="password">Password</label>
-							<input type="password" id="password" name="password" placeholder="Create password" required>
-						</div>
-						<div class="quantity">
-							<label for="confirm-password">Confirm Password</label>
-							<input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm password" required>
-						</div>
-					</div>
-
-					<button class="submit-btn" type="submit">Create Account</button>
-				</form>
+				<div>
+					<label>Confirm Password</label>
+					<input type="password" placeholder="Confirm password" required>
+				</div>
 			</div>
-		</section>
-	</main>
+					
+			<button class="btn" type="submit" style="width: 100%; margin-top: 10px;">Create Account</button>
+		
+		</form>
+	</div>
+</main>
 </body>
 </html>
+
+
+
+

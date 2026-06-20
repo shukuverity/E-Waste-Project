@@ -6,230 +6,158 @@
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="../CSS/style.css">
 </head>
-<body class="admin-page">
-    <header class="dashboard-header admin-topbar">
-        <button class="modules-toggle-btn" id="modules-toggle" aria-expanded="false" aria-controls="admin-modules-menu" aria-label="Toggle main modules">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-        <h1 style="color: #ffffff;">E-waste Platform Admin Dashboard</h1>
+<body>
+    <header class="navbar">
+        <h1>E-waste Platform Admin Dashboard</h1>
+        <nav>
+            <a href="dashboard.html" class="btn">Dashboard</a>
+            <a href="contact.html" class="btn">Contact</a>
+            <a href="login.html" class="btn">Logout</a>
+        </nav>
     </header>
 
-    <main class="dashboard-container">
-        <aside class="admin-sidebar" id="admin-modules-menu">
-            <p class="sidebar-section-title">Main Modules</p>
-            <nav class="admin-nav-links" aria-label="Admin navigation">
-                <a href="dashboard.html">Dashboard</a>
-                <a href="dashboard.html#find-recycler">Recyclers</a>
-                <a href="contact.html">Contact</a>
-            </nav>
-        </aside>
+    <main class="container">
+        <div class="card">
+            <h2>Admin Portal</h2>
+                <p><strong>Name:</strong> John Mangi</p>
+                <p><strong>Role:</strong> Administrator</p>
+                <br>
+                <a href="login.html" class="btn" style="width:93%;"> Logout </a>
+                </div>
+        </div>
 
-        <section class="admin-main">
-            <div class="dashboard-content">
-                <div class="admin-info-box">
-                    <div class="panel-header">
-                        <h2>Admin Portal</h2>
-                    </div>
-                    <p><strong>John Mangi</strong></p>
-                    <p>Role: Administrator</p>
-                    <span class="live-status">Live</span>
-                    <button class="submit-btn">Logout</button>
+        <div class="card">
+            <h2>Overview</h2>
+
+            <div class="overview-grid">
+                <div class="overview-item">
+                    <h3>15</h3>
+                    <p>Active recyclers certified</p>
+                    <span class="trend badge">+23%</span>
+                </div>
+
+                <div class="overview-item">
+                    <h3>12,450 kg</h3>
+                    <p>Total e-waste collected</p>
+                    <span class="trend badge">+18%</span>
+                </div>
+
+                <div class="overview-item">
+                    <h3>45,200</h3>
+                    <p>Points awarded this month</p>
+                    <span class="trend badge">+1%</span>
+                </div>
+
+                <div class="overview-item">
+                    <h3>94%</h3>
+                    <p>Compliance rate (NEMA)</p>
+                    <span class="trend badge">On target</span>
                 </div>
             </div>
+        </div>
+            
+        <div class="card">
+            <h2>Pending Approvals</h2>
 
-            <div class="dashboard-content">
-                <div class="panel-header admin-panel-header">
-                    <h2>Overview</h2>
-                    <span>June 2026</span>
-                </div>
+            <p><strong>GreenTech</strong></p>
+            <p>NEMA-001 | 2026-05-20</p>
+            <p>Status: <span class="badge">Pending</span></p>
+            <button class="btn">Validate</button>
+            <button class="btn">Approve</button>
+            <br>
 
-                <div class="stats-grid">
-                    <article class="stat-card">
-                        <h3>15</h3>
-                        <p>Active recyclers certified</p>
-                        <span class="trend">+23%</span>
-                    </article>
+            <p><strong>EcoCycle</strong></p>
+            <p>NEMA-002 | 2026-05-07</p>
+            <p>Status: <span class="badge">Pending</span></p>
+            <button class="btn">Validate</button>
+            <button class="btn">Approve</button>
+            <br>
 
-                    <article class="stat-card">
-                        <h3>12,450 kg</h3>
-                        <p>Total e-waste collected</p>
-                        <span class="trend">+18%</span>
-                    </article>
+            <p><strong>RecycleHub</strong></p>
+            <p>NEMA-003 | 2026-05-18</p>
+            <p>Status: <span class="badge">Pending</span></p>
+            <button class="btn">Validate</button>
+            <button class="btn">Approve</button>
+            <br>
+        </div>
 
-                    <article class="stat-card">
-                        <h3>45,200</h3>
-                        <p>Points awarded this month</p>
-                        <span class="trend">+1%</span>
-                    </article>
-
-                    <article class="stat-card">
-                        <h3>94%</h3>
-                        <p>Compliance rate (NEMA)</p>
-                        <span class="trend">On target</span>
-                    </article>
-                </div>
+        <div class="card">
+            <div class="card-header">
+            <h2>Waste by Category</h2>
+            <span class="badge">May 2026</span>
             </div>
-
-            <div class="dashboard-content">
-                <div class="panel-header admin-panel-header">
-                    <h2>Pending Approvals</h2>
-                    <span>3 pending</span>
+            <div class="category-card">
+                <div class="category-summary">
+                    <p><b>Total</b></p>
+                    <h3>12,450 kg</h3>
                 </div>
 
-                <div class="approval-list">
-                    <article class="approval-card">
-                        <p><strong>GreenTech</strong></p>
-                        <p>NEMA-001 | 2026-05-20</p>
-                        <p>Status: <span class="pending">Pending</span></p>
-                        <div class="btn-group">
-                            <button class="submit-btn">Validate</button>
-                            <button class="submit-btn">Approve</button>
-                        </div>
-                    </article>
+                <ul class="category-list">
+                    <li>
+                        <span>Phones</span>
+                        <div class="bar bar-45">45%</div>
+                    </li>
 
-                    <article class="approval-card">
-                        <p><strong>EcoCycle</strong></p>
-                        <p>NEMA-002 | 2026-05-07</p>
-                        <p>Status: <span class="pending">Pending</span></p>
-                        <div class="btn-group">
-                            <button class="submit-btn">Validate</button>
-                            <button class="submit-btn">Approve</button>
-                        </div>
-                    </article>
+                    <li>
+                        <span>Laptops</span>
+                        <div class="bar bar-30">30%</div>
+                    </li>
 
-                    <article class="approval-card">
-                        <p><strong>RecycleHub</strong></p>
-                        <p>NEMA-003 | 2026-05-18</p>
-                        <p>Status: <span class="pending">Pending</span></p>
-                        <div class="btn-group">
-                            <button class="submit-btn">Validate</button>
-                            <button class="submit-btn">Approve</button>
-                        </div>
-                    </article>
-                </div>
+                    <li>
+                        <span>TVs</span>
+                        <div class="bar bar-15">15%</div>
+                    </li>
+                    <li>
+                        <span>Batteries</span>
+                        <div class="bar bar-4">4%</div>
+                    </li>
+                </ul>
             </div>
+        </div>
+        <div class="card">
+            <h2>🏆 Recycler Performance</h2>
+            <span class="badge">Full report</span>
+        <table style="width:100%;" class="container">
+            <tr>
+                <td>WEEE Centre</td>
+                <td>312 pickups</td>
+                <td>4.5</td>
+            </tr>
+            <tr>
+                <td>CFSK</td>
+                <td>278 pickups</td>
+                <td>4.2</td>
+            </tr>
+            <tr>
+                <td>EACR</td>
+                <td>195 pickups</td>
+                <td>4.0 </td>
+            </tr>
+            <tr>
+                <td>Stima Recyclers</td>
+                <td>142 pickups</td>
+                <td>3.8 </td>
+            </tr>
+        </table>
+        </div>
 
-            <div class="dashboard-content">
-                <div class="panel-header admin-panel-header">
-                    <h2>Weekly Disposal Trend</h2>
-                    <span>T+23%</span>
-                </div>
+        <div class="card">
+            <h2>Pending Approvals</h2>
+            <span class="badge">5 requests</span>
+            <div class="container">
+                <p><strong>Amani Green Tech</strong></p>
+                <p>Role: Recycler | Nairobi</p>
+                <button class="btn">Review</button>
+                <br>
 
-                <div class="weekly-trend-graph" id="weekly-trend-graph" aria-label="Weekly disposal trend graph">
-                    <div class="trend-grid-lines" aria-hidden="true"></div>
-                </div>
+                <p><strong>EcoQ Audit</strong></p>
+                <p>Role: Auditor - Kisumu</p>
+                <button class="btn">Review</button>
+                <br>
             </div>
-
-            <div class="dashboard-content">
-                <div class="panel-header admin-panel-header">
-                    <h2>Waste by Category</h2>
-                    <span>May 2026</span>
-                </div>
-
-                <div class="category-layout">
-                    <article class="stat-card total-card total-left">
-                        <p>Total</p>
-                        <h3>12,450 kg</h3>
-                    </article>
-
-                    <ul class="category-list" aria-label="Waste category percentage bars">
-                        <li class="category-row">
-                            <span class="category-name">Phones</span>
-                            <div class="horizontal-bar-track" aria-hidden="true">
-                                <div class="horizontal-bar-fill" style="width: 45%;"></div>
-                            </div>
-                            <strong class="category-percent">45%</strong>
-                        </li>
-
-                        <li class="category-row">
-                            <span class="category-name">Laptops</span>
-                            <div class="horizontal-bar-track" aria-hidden="true">
-                                <div class="horizontal-bar-fill" style="width: 30%;"></div>
-                            </div>
-                            <strong class="category-percent">30%</strong>
-                        </li>
-
-                        <li class="category-row">
-                            <span class="category-name">TVs</span>
-                            <div class="horizontal-bar-track" aria-hidden="true">
-                                <div class="horizontal-bar-fill" style="width: 15%;"></div>
-                            </div>
-                            <strong class="category-percent">15%</strong>
-                        </li>
-
-                        <li class="category-row">
-                            <span class="category-name">Batteries</span>
-                            <div class="horizontal-bar-track" aria-hidden="true">
-                                <div class="horizontal-bar-fill" style="width: 4%;"></div>
-                            </div>
-                            <strong class="category-percent">4%</strong>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="dashboard-content">
-                <div class="panel-header admin-panel-header">
-                    <h2 class="perf-title"><span class="perf-trophy" aria-hidden="true">&#127942;</span> Recycler Performance</h2>
-                    <span>Full report</span>
-                </div>
-
-                <div class="performance-list">
-                    <article class="approval-card performance-item">
-                        <p><strong>WEEE Centre</strong></p>
-                        <p>312 pickups</p>
-                        <p class="rating">4.5 <span class="rating-change rating-up" aria-label="increased">&#8593;</span></p>
-                    </article>
-
-                    <article class="approval-card performance-item">
-                        <p><strong>CFSK</strong></p>
-                        <p>278 pickups</p>
-                        <p class="rating">4.2 <span class="rating-change rating-up" aria-label="increased">&#8593;</span></p>
-                    </article>
-
-                    <article class="approval-card performance-item">
-                        <p><strong>EACR</strong></p>
-                        <p>195 pickups</p>
-                        <p class="rating">4.0 <span class="rating-change rating-down" aria-label="decreased">&#8595;</span></p>
-                    </article>
-
-                    <article class="approval-card performance-item">
-                        <p><strong>Stima Recyclers</strong></p>
-                        <p>142 pickups</p>
-                        <p class="rating">3.8 <span class="rating-change rating-down" aria-label="decreased">&#8595;</span></p>
-                    </article>
-                </div>
-            </div>
-
-            <div class="dashboard-content">
-                <div class="panel-header admin-panel-header">
-                    <h2>Pending Approvals</h2>
-                    <span>5 requests</span>
-                </div>
-
-                <div class="approval-list">
-                    <article class="approval-card">
-                        <p><strong>Amani Green Tech</strong></p>
-                        <p>Role: Recycler | Nairobi</p>
-                        <div class="btn-group">
-                            <button class="submit-btn">Review</button>
-                        </div>
-                    </article>
-
-                    <article class="approval-card">
-                        <p><strong>EcoQ Audit</strong></p>
-                        <p>Role: Auditor - Kisumu</p>
-                        <div class="btn-group">
-                            <button class="submit-btn">Review</button>
-                        </div>
-                    </article>
-                </div>
-            </div>
-        </section>
+        </div>
     </main>
-
-    <script src="../Java/admin.js"></script>
 </body>
 </html>
+
+

@@ -6,99 +6,76 @@
 	<title>Contact | E-Waste Platform</title>
 	<link rel="stylesheet" href="../CSS/style.css" />
 </head>
-<body class="admin-page contact-page">
-	<header class="dashboard-header admin-topbar">
-		<button class="modules-toggle-btn" id="modules-toggle" aria-expanded="false" aria-controls="admin-modules-menu" aria-label="Toggle main modules">
-			<span></span>
-			<span></span>
-			<span></span>
-		</button>
-		<h1 style="color: #ffffff;">E-waste Platform Contact & About</h1>
+<body>
+	<header class="navbar">
+		<h1>E-waste Platform Contact & About</h1>
+		<nav>
+			<a href="dashboard.html" class="btn">Dashboard</a>
+			<a href="home.html" class="btn">Home</a>
+			<a href="login.html" class="btn">Logout</a>
+		</nav>
 	</header>
 
-	<main class="dashboard-container">
-		<aside class="admin-sidebar" id="admin-modules-menu">
-			<p class="sidebar-section-title">Main Modules</p>
-			<nav class="admin-nav-links" aria-label="Main navigation">
-				<a href="dashboard.html">Dashboard</a>
-				<a href="dashboard.html#find-recycler">Recyclers</a>
-				<a href="contact.html">Contact</a>
-			</nav>
-		</aside>
+	<main class="container">
 
-		<section class="admin-main">
-			<div class="dashboard-content contact-hero-card">
-				<div class="panel-header admin-panel-header">
-					<h2>About The Platform</h2>
-					<span>Nairobi, Kenya</span>
+		<div class="card">
+			<h2>About The Platform</h2>
+				
+			<p>
+				The E-waste Platform helps households, schools, and businesses safely dispose of electronic
+				waste by connecting them to certified recyclers.
+			</p>
+			<p>	Where</p>
+			<ul>
+			<li><strong>Safe Disposal</strong></li>
+			<li><strong>Certified Recyclers</strong></li>
+			<li><strong>NEMA Compliance</strong></li>
+			</ul>
+		<p>are guaranteed.</p>	
+		</div>
+
+		<div class="card">
+			<h2>Contact Us</h2>
+				<p><strong>Email:</strong> support@ewaste.com</p>
+				<p><strong>Phone:</strong> +254 700 123 456</p>
+				<p><strong>Address:</strong> Green Park Towers, Nairobi</p>
+				<p><strong>Working Hours:</strong> Mon-Sat, 9:00 AM - 6:00 PM</p>
+				<p><strong>Status:</strong> <span class="badge">Active</span></p>
+		</div>
+
+		<form class="card">
+				<div>
+					<label><strong>Name:</strong></label>
+					<input type="text"placeholder="Enter full name" required>
 				</div>
-				<p class="contact-intro">
-					The E-waste Platform helps households, schools, and businesses safely dispose of electronic waste by connecting them to verified recyclers and compliance-focused audits.
-				</p>
-				<div class="contact-pill-row">
-					<span class="contact-pill">Safe Disposal</span>
-					<span class="contact-pill">Certified Recyclers</span>
-					<span class="contact-pill">NEMA Compliance</span>
+				<div>
+					<label><strong>Email Address:</strong></	label>
+					<input type="email" placeholder="Enter email" required>
 				</div>
-			</div>
-
-			<div class="dashboard-content contact-grid-card">
-				<div class="panel-header admin-panel-header">
-					<h2>Contact Us</h2>
-					<span>We reply within 24h</span>
+				<div>
+					<label><strong>Phone:</strong></label>
+					<input type="tel"placeholder="Enter phone number" required>
 				</div>
-				<div class="contact-grid">
-					<div class="contact-info-panel">
-						<h3>Reach Us</h3>
-						<p><strong>Email:</strong> support@ewaste.com</p>
-						<p><strong>Phone:</strong> +254 700 123 456</p>
-						<p><strong>Address:</strong> Green Park Towers, Nairobi</p>
-						<p><strong>Working Hours:</strong> Mon-Sat, 9:00 AM - 6:00 PM</p>
-						<p><strong>Status:</strong> <span class="live-status">Active</span></p>
-					</div>
-
-					<form class="contact-form-panel" action="#" method="post">
-						<div class="form-row">
-							<div class="item-type">
-								<label for="name">Full Name</label>
-								<input type="text" id="name" name="name" placeholder="Enter full name" required />
-							</div>
-							<div class="quantity">
-								<label for="email">Email Address</label>
-								<input type="email" id="email" name="email" placeholder="Enter email" required />
-							</div>
-						</div>
-
-						<div class="form-row">
-							<div class="condition">
-								<label for="phone">Phone</label>
-								<input type="tel" id="phone" name="phone" placeholder="Enter phone number" />
-							</div>
-							<div class="weight">
-								<label for="subject">Subject</label>
-								<select id="subject" name="subject" required>
-									<option value="">Select subject</option>
-									<option>Pickup Request</option>
-									<option>Partnership</option>
-									<option>General Inquiry</option>
-									<option>Complaint</option>
-								</select>
-							</div>
-						</div>
-
-						<label for="message">Message</label>
-						<textarea id="message" name="message" rows="6" placeholder="Write your message..." required></textarea>
-
-						<div class="contact-form-actions">
-							<button type="submit" class="submit-btn">Send Message</button>
-							<button type="reset" class="redeem-btn">Clear</button>
-						</div>
-					</form>
+				<div>
+					<label><strong>Subject:</strong></label>
+					<select required>
+						<option>Pickup Request</option>
+						<option>Partnership</option>
+						<option>General Inquiry</option>
+						<option>Complaint</option>
+					</select>
 				</div>
-			</div>
-		</section>
+
+			<label><strong>Message:</strong></label>
+			<br>
+			<textarea style="width: 100%;" rows="6" placeholder="Write your message..." required></textarea>
+
+			<button class="btn">Send Message</button>
+			<button class="btn">Clear</button>
+		</form>
 	</main>
 
-	<script src="../Java/admin.js"></script>
 </body>
 </html>
+
+
