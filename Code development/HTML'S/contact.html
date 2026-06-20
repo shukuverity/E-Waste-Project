@@ -43,22 +43,22 @@
 				<p><strong>Status:</strong> <span class="badge">Active</span></p>
 		</div>
 
-		<form class="card">
+		<form class="card" method="post" action="#" aria-label="Contact form">
 				<div>
-					<label><strong>Name:</strong></label>
-					<input type="text"placeholder="Enter full name" required>
+					<label for="contact-name"><strong>Name:</strong></label>
+					<input id="contact-name" name="name" type="text" placeholder="Enter full name" required>
 				</div>
 				<div>
-					<label><strong>Email Address:</strong></	label>
-					<input type="email" placeholder="Enter email" required>
+					<label for="contact-email"><strong>Email Address:</strong></label>
+					<input id="contact-email" name="email" type="email" placeholder="Enter email" required>
 				</div>
 				<div>
-					<label><strong>Phone:</strong></label>
-					<input type="tel"placeholder="Enter phone number" required>
+					<label for="contact-phone"><strong>Phone:</strong></label>
+					<input id="contact-phone" name="phone" type="tel" placeholder="Enter phone number" required>
 				</div>
 				<div>
-					<label><strong>Subject:</strong></label>
-					<select required>
+					<label for="contact-subject"><strong>Subject:</strong></label>
+					<select id="contact-subject" name="subject" required>
 						<option>Pickup Request</option>
 						<option>Partnership</option>
 						<option>General Inquiry</option>
@@ -66,12 +66,14 @@
 					</select>
 				</div>
 
-			<label><strong>Message:</strong></label>
+			<label for="contact-message"><strong>Message:</strong></label>
 			<br>
-			<textarea style="width: 100%;" rows="6" placeholder="Write your message..." required></textarea>
+			<textarea id="contact-message" name="message" style="width: 100%;" rows="6" placeholder="Write your message..." required></textarea>
 
-			<button class="btn">Send Message</button>
-			<button class="btn">Clear</button>
+			<div class="form-actions">
+				<button class="btn" type="submit">Send Message</button>
+				<button class="btn secondary" type="reset">Clear</button>
+			</div>
 		</form>
 	</main>
 

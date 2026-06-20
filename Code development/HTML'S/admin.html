@@ -19,11 +19,10 @@
     <main class="container">
         <div class="card">
             <h2>Admin Portal</h2>
-                <p><strong>Name:</strong> John Mangi</p>
-                <p><strong>Role:</strong> Administrator</p>
-                <br>
-                <a href="login.html" class="btn" style="width:93%;"> Logout </a>
-                </div>
+            <p><strong>Name:</strong> John Mangi</p>
+            <p><strong>Role:</strong> Administrator</p>
+            <br>
+            <a href="login.html" class="btn" style="width:100%;">Logout</a>
         </div>
 
         <div class="card">
@@ -57,28 +56,36 @@
         </div>
             
         <div class="card">
-            <h2>Pending Approvals</h2>
+            <div class="card-header">
+                <h2>Pending Approvals</h2>
+                <div class="form-actions">
+                    <span class="badge" id="pending-approvals-count">0 pending</span>
+                </div>
+            </div>
 
+            <div class="approval-item" data-recycler="GreenTech">
             <p><strong>GreenTech</strong></p>
             <p>NEMA-001 | 2026-05-20</p>
-            <p>Status: <span class="badge">Pending</span></p>
-            <button class="btn">Validate</button>
-            <button class="btn">Approve</button>
+            <p>Status: <span class="badge recycler-status">Pending</span></p>
+            <button class="btn approve-btn" type="button">Approve</button>
             <br>
+            </div>
 
+            <div class="approval-item" data-recycler="EcoCycle">
             <p><strong>EcoCycle</strong></p>
             <p>NEMA-002 | 2026-05-07</p>
-            <p>Status: <span class="badge">Pending</span></p>
-            <button class="btn">Validate</button>
-            <button class="btn">Approve</button>
+            <p>Status: <span class="badge recycler-status">Pending</span></p>
+            <button class="btn approve-btn" type="button">Approve</button>
             <br>
+            </div>
 
+            <div class="approval-item" data-recycler="RecycleHub">
             <p><strong>RecycleHub</strong></p>
             <p>NEMA-003 | 2026-05-18</p>
-            <p>Status: <span class="badge">Pending</span></p>
-            <button class="btn">Validate</button>
-            <button class="btn">Approve</button>
+            <p>Status: <span class="badge recycler-status">Pending</span></p>
+            <button class="btn approve-btn" type="button">Approve</button>
             <br>
+            </div>
         </div>
 
         <div class="card">
@@ -115,7 +122,7 @@
             </div>
         </div>
         <div class="card">
-            <h2>🏆 Recycler Performance</h2>
+            <h2>Recycler Performance</h2>
             <span class="badge">Full report</span>
         <table style="width:100%;" class="container">
             <tr>
@@ -142,7 +149,7 @@
         </div>
 
         <div class="card">
-            <h2>Pending Approvals</h2>
+            <h2>Open Reviews</h2>
             <span class="badge">5 requests</span>
             <div class="container">
                 <p><strong>Amani Green Tech</strong></p>
@@ -156,7 +163,26 @@
                 <br>
             </div>
         </div>
+
+        <div class="card">
+            <h2>Live Status Feed</h2>
+            <p class="muted" id="admin-live-status">Waiting for activity...</p>
+            <ul id="admin-activity-log"></ul>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>Admin Notifications</h2>
+                <span class="badge" id="admin-unread-count">0 unread</span>
+            </div>
+            <ul id="admin-notification-list" class="notification-list"></ul>
+            <div class="form-actions">
+                <button id="mark-admin-read-btn" class="btn secondary" type="button">Mark all as read</button>
+                <button id="mark-admin-unread-btn" class="btn secondary" type="button">Mark all unread</button>
+            </div>
+        </div>
     </main>
+    <script src="../Java/live-status.js"></script>
 </body>
 </html>
 

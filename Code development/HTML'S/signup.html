@@ -6,29 +6,30 @@
 	<title>Sign Up | E-waste Platform</title>
 	<link rel="stylesheet" href="../CSS/style.css">
 </head>
+<body>
 <main class="container">
 	<div class="card" style="max-width: 700px; margin: auto;">
 		<h1>Create Account</h1>
 
-		<form>
+		<form method="post" action="#" aria-label="Sign up form">
 			<div class="grid-container">
 				<div>
 					<label for="full-name">Full Name</label>
-					<input type="text" placeholder="Enter full name" required>
+					<input id="full-name" name="fullName" type="text" placeholder="Enter full name" required>
 				</div>
 
 				<div>
 					<label for="email">Email Address</label>
-					<input type="email" placeholder="Enter email" required>
+					<input id="email" name="email" type="email" placeholder="Enter email" required>
 				</div>
 				
 				<div>
-					<label>Phone Number</label>
-					<input type="tel" placeholder="Enter phone number" required>
+					<label for="phone">Phone Number</label>
+					<input id="phone" name="phoneNumber" type="tel" placeholder="Enter phone number" required>
 				</div>
 						
 				<div>
-					<label>Role</label>
+					<label for="role">Role</label>
 					<select id="role" name="role" required>
 						<option>User</option>
 						<option>Recycler</option>
@@ -37,13 +38,13 @@
 				</div>
 
 				<div>
-					<label>Password</label>
-					<input type="password" placeholder="Create password" required>
+					<label for="password">Password</label>
+					<input id="password" name="password" type="password" placeholder="Create password" required>
 				</div>
 
 				<div>
-					<label>Confirm Password</label>
-					<input type="password" placeholder="Confirm password" required>
+					<label for="confirm-password">Confirm Password</label>
+					<input id="confirm-password" name="confirmPassword" type="password" placeholder="Confirm password" required>
 				</div>
 			</div>
 					
