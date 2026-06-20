@@ -1,398 +1,288 @@
 (function () {
-    const STORAGE_KEY = "ewaste_live_state";
-    const STATE_VERSION = 2;
+    "use strict";
 
-    // Mirrors Java src status progression in WasteRequest.Status
-    const REQUEST_STATUS_FLOW = ["SUBMITTED", "SCHEDULED", "IN_TRANSIT", "COMPLETED", "CANCELLED"];
-
-    const defaultState = {
-        stateVersion: STATE_VERSION,
-        requestId: null,
-        requestStatus: null,
-        requestCounter: 1200,
-        notificationCounter: 0,
-        recyclers: {
-            GreenTech: "Pending",
-            EcoCycle: "Pending",
-            RecycleHub: "Pending"
-        },
-        activityLog: [],
-        notifications: {
-            user: [],
-            admin: []
-        }
+    const STORAGE_KEYS = {
+        request: "ewaste_latest_request",
+        activity: "ewaste_activity_log",
+        userNotifications: "ewaste_user_notifications",
+        adminNotifications: "ewaste_admin_notifications"
     };
 
-    function loadState() {
+    const STATUS_FLOW = ["SUBMITTED", "SCHEDULED", "IN_TRANSIT", "COMPLETED"];
+
+    function readJson(key, fallbackValue) {
+        const rawValue = localStorage.getItem(key);
+        if (!rawValue) {
+            return fallbackValue;
+        }
+
         try {
-            const existing = localStorage.getItem(STORAGE_KEY);
-            if (!existing) {
-                return { ...defaultState };
-            }
-            const parsed = JSON.parse(existing);
-            const hydrated = {
-                ...defaultState,
-                ...parsed,
-                recyclers: { ...defaultState.recyclers, ...(parsed.recyclers || {}) },
-                activityLog: Array.isArray(parsed.activityLog) ? parsed.activityLog : [],
-                notifications: {
-                    user: Array.isArray(parsed.notifications && parsed.notifications.user)
-                        ? parsed.notifications.user
-                        : [],
-                    admin: Array.isArray(parsed.notifications && parsed.notifications.admin)
-                        ? parsed.notifications.admin
-                        : []
-                }
-            };
-
-            // One-time state migration: return all approval entries to Pending.
-            if (parsed.stateVersion !== STATE_VERSION) {
-                hydrated.recyclers = { ...defaultState.recyclers };
-                hydrated.stateVersion = STATE_VERSION;
-            }
-
-            return hydrated;
-        } catch (err) {
-            return { ...defaultState };
+            return JSON.parse(rawValue);
+        } catch (error) {
+            return fallbackValue;
         }
     }
 
-    function saveState(state) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    function writeJson(key, value) {
+        localStorage.setItem(key, JSON.stringify(value));
     }
 
-    function addActivity(state, line) {
-        state.activityLog.unshift(new Date().toLocaleTimeString() + " - " + line);
-        if (state.activityLog.length > 8) {
-            state.activityLog = state.activityLog.slice(0, 8);
-        }
-    }
-
-    function addNotification(state, audience, message) {
-        if (!state.notifications || !Array.isArray(state.notifications[audience])) {
-            return;
-        }
-
-        state.notificationCounter += 1;
-        state.notifications[audience].unshift({
-            id: state.notificationCounter,
-            message: message,
-            time: new Date().toLocaleTimeString(),
-            read: false
-        });
-
-        if (state.notifications[audience].length > 20) {
-            state.notifications[audience] = state.notifications[audience].slice(0, 20);
-        }
-    }
-
-    function markAllRead(state, audience) {
-        if (!state.notifications || !Array.isArray(state.notifications[audience])) {
-            return;
-        }
-        state.notifications[audience] = state.notifications[audience].map(function (item) {
-            return { ...item, read: true };
+    function formatStatus(status) {
+        return String(status || "").replace(/_/g, " ").toLowerCase().replace(/\b\w/g, function (char) {
+            return char.toUpperCase();
         });
     }
 
-    function markAllUnread(state, audience) {
-        if (!state.notifications || !Array.isArray(state.notifications[audience])) {
-            return;
-        }
-        state.notifications[audience] = state.notifications[audience].map(function (item) {
-            return { ...item, read: false };
-        });
+    function formatTime(timestamp) {
+        return new Date(timestamp).toLocaleString();
     }
 
-    function unreadCount(state, audience) {
-        if (!state.notifications || !Array.isArray(state.notifications[audience])) {
-            return 0;
-        }
-        return state.notifications[audience].filter(function (item) {
-            return !item.read;
-        }).length;
+    function makeRequestId() {
+        const stamp = Date.now().toString().slice(-6);
+        const suffix = Math.floor(Math.random() * 900 + 100);
+        return "REQ-" + stamp + "-" + suffix;
     }
 
-    function deriveStatusFromWorkflow(state) {
-        if (!state.requestId) {
-            return null;
-        }
-        if (state.requestStatus === "CANCELLED") {
-            return "CANCELLED";
+    function deriveAutoStatus(request) {
+        if (!request || request.status === "CANCELLED" || request.status === "COMPLETED") {
+            return request ? request.status : "";
         }
 
-        const recyclerStates = Object.values(state.recyclers || {});
-        const hasCollected = recyclerStates.includes("Collected");
-        const hasApproved = recyclerStates.includes("Approved") || hasCollected;
-        const hasValidated = recyclerStates.includes("Validated") || hasApproved;
+        const createdAt = Number(request.createdAt || Date.now());
+        const elapsedSeconds = Math.floor((Date.now() - createdAt) / 1000);
 
-        if (hasCollected) {
+        if (elapsedSeconds >= 45) {
             return "COMPLETED";
         }
-        if (hasApproved) {
+
+        if (elapsedSeconds >= 30) {
             return "IN_TRANSIT";
         }
-        if (hasValidated) {
+
+        if (elapsedSeconds >= 15) {
             return "SCHEDULED";
         }
+
         return "SUBMITTED";
     }
 
-    function syncRequestStatus(state, withActivityLog) {
-        const previous = state.requestStatus;
-        const next = deriveStatusFromWorkflow(state);
+    function addActivity(message) {
+        const activityLog = readJson(STORAGE_KEYS.activity, []);
+        activityLog.unshift({
+            message: message,
+            timestamp: Date.now()
+        });
 
-        if (previous !== next) {
-            state.requestStatus = next;
-            if (withActivityLog && state.requestId && next) {
-                addActivity(state, "Request " + state.requestId + " is now " + next + " by workflow.");
-                addNotification(state, "user", "Request " + state.requestId + " status changed to " + next + ".");
-                addNotification(state, "admin", "Workflow updated request " + state.requestId + " to " + next + ".");
-            }
-            return true;
-        }
-        return false;
+        writeJson(STORAGE_KEYS.activity, activityLog.slice(0, 20));
     }
 
-    function setupDashboard(state) {
-        const requestForm = document.getElementById("waste-request-form");
-        const requestIdText = document.getElementById("request-id");
-        const requestStatusText = document.getElementById("request-status");
-        const flowText = document.getElementById("status-flow");
-        const removeBtn = document.getElementById("remove-request-btn");
-        const userNotificationList = document.getElementById("user-notification-list");
-        const userUnreadCount = document.getElementById("user-unread-count");
-        const markUserReadBtn = document.getElementById("mark-user-read-btn");
-        const markUserUnreadBtn = document.getElementById("mark-user-unread-btn");
+    function pushNotification(storageKey, message) {
+        const notifications = readJson(storageKey, []);
+        notifications.unshift({
+            message: message,
+            timestamp: Date.now(),
+            read: false
+        });
 
-        if (!requestForm || !requestIdText || !requestStatusText) {
+        writeJson(storageKey, notifications.slice(0, 30));
+    }
+
+    function renderNotifications(listId, countId, storageKey) {
+        const listElement = document.getElementById(listId);
+        const countElement = document.getElementById(countId);
+        const markReadButton = document.getElementById(listId.indexOf("admin") === 0 ? "mark-admin-read-btn" : "mark-user-read-btn");
+        const markUnreadButton = document.getElementById(listId.indexOf("admin") === 0 ? "mark-admin-unread-btn" : "mark-user-unread-btn");
+
+        if (!listElement || !countElement) {
             return;
         }
 
-        function paintRequest() {
-            syncRequestStatus(state, false);
-            requestIdText.textContent = state.requestId || "No request yet";
-            requestStatusText.textContent = state.requestStatus || "No active request";
-            if (flowText) {
-                flowText.textContent = "Source status flow: " + REQUEST_STATUS_FLOW.join(" -> ")
-                    + " | auto-driven by admin/recycler actions.";
-            }
+        const notifications = readJson(storageKey, []);
+        const unreadCount = notifications.filter(function (item) {
+            return !item.read;
+        }).length;
 
-            if (userNotificationList && userUnreadCount) {
-                const list = state.notifications.user || [];
-                userNotificationList.innerHTML = list.length
-                    ? list
-                        .map(function (item) {
-                            return '<li class="' + (item.read ? '' : 'unread') + '">' + item.time + ' - ' + item.message + '</li>';
-                        })
-                        .join("")
-                    : "<li>No notifications yet.</li>";
-                userUnreadCount.textContent = unreadCount(state, "user") + " unread";
-            }
+        countElement.textContent = unreadCount + " unread";
+        listElement.innerHTML = "";
+
+        if (!notifications.length) {
+            const empty = document.createElement("li");
+            empty.className = "muted";
+            empty.textContent = "No notifications yet.";
+            listElement.appendChild(empty);
+        } else {
+            notifications.slice(0, 8).forEach(function (item) {
+                const li = document.createElement("li");
+                li.className = item.read ? "notification-item" : "notification-item unread";
+                li.textContent = item.message + " (" + formatTime(item.timestamp) + ")";
+                listElement.appendChild(li);
+            });
         }
 
-        requestForm.addEventListener("submit", function (event) {
-            event.preventDefault();
-            state.requestCounter += 1;
-            state.requestId = "REQ-" + state.requestCounter;
-            state.requestStatus = REQUEST_STATUS_FLOW[0];
-            addActivity(state, "Request " + state.requestId + " submitted.");
-            addNotification(state, "user", "Request " + state.requestId + " submitted successfully.");
-            addNotification(state, "admin", "New request received: " + state.requestId + ".");
-            syncRequestStatus(state, true);
-            saveState(state);
-            paintRequest();
-        });
+        if (markReadButton && !markReadButton.dataset.bound) {
+            markReadButton.dataset.bound = "true";
+            markReadButton.addEventListener("click", function () {
+                const updated = readJson(storageKey, []).map(function (item) {
+                    return Object.assign({}, item, { read: true });
+                });
 
-        removeBtn.addEventListener("click", function () {
-            if (!state.requestStatus) {
+                writeJson(storageKey, updated);
+                renderNotifications(listId, countId, storageKey);
+            });
+        }
+
+        if (markUnreadButton && !markUnreadButton.dataset.bound) {
+            markUnreadButton.dataset.bound = "true";
+            markUnreadButton.addEventListener("click", function () {
+                const updated = readJson(storageKey, []).map(function (item) {
+                    return Object.assign({}, item, { read: false });
+                });
+
+                writeJson(storageKey, updated);
+                renderNotifications(listId, countId, storageKey);
+            });
+        }
+    }
+
+    function renderDashboardRequest() {
+        const requestIdElement = document.getElementById("request-id");
+        const requestStatusElement = document.getElementById("request-status");
+
+        if (!requestIdElement || !requestStatusElement) {
+            return;
+        }
+
+        const request = readJson(STORAGE_KEYS.request, null);
+
+        if (!request) {
+            requestIdElement.textContent = "No request yet";
+            requestStatusElement.textContent = "No active request";
+            return;
+        }
+
+        const autoStatus = deriveAutoStatus(request);
+        if (autoStatus && autoStatus !== request.status) {
+            request.status = autoStatus;
+            request.updatedAt = Date.now();
+            writeJson(STORAGE_KEYS.request, request);
+
+            addActivity("Request " + request.id + " moved to " + formatStatus(request.status) + ".");
+            pushNotification(STORAGE_KEYS.userNotifications, "Your pickup request is now " + formatStatus(request.status) + ".");
+            pushNotification(STORAGE_KEYS.adminNotifications, "Request " + request.id + " changed to " + formatStatus(request.status) + ".");
+        }
+
+        requestIdElement.textContent = request.id;
+        requestStatusElement.textContent = formatStatus(request.status);
+    }
+
+    function renderAdminLiveFeed() {
+        const statusElement = document.getElementById("admin-live-status");
+        const logElement = document.getElementById("admin-activity-log");
+
+        if (!statusElement || !logElement) {
+            return;
+        }
+
+        const request = readJson(STORAGE_KEYS.request, null);
+        if (!request) {
+            statusElement.textContent = "Waiting for activity...";
+        } else {
+            statusElement.textContent = "Latest request " + request.id + " is " + formatStatus(request.status) + ".";
+        }
+
+        const activityLog = readJson(STORAGE_KEYS.activity, []);
+        logElement.innerHTML = "";
+
+        if (!activityLog.length) {
+            const li = document.createElement("li");
+            li.className = "muted";
+            li.textContent = "No recent activity yet.";
+            logElement.appendChild(li);
+            return;
+        }
+
+        activityLog.slice(0, 6).forEach(function (entry) {
+            const li = document.createElement("li");
+            li.textContent = entry.message + " (" + formatTime(entry.timestamp) + ")";
+            logElement.appendChild(li);
+        });
+    }
+
+    function wireDashboardForm() {
+        const form = document.getElementById("waste-request-form");
+        if (!form) {
+            return;
+        }
+
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const request = {
+                id: makeRequestId(),
+                status: "SUBMITTED",
+                createdAt: Date.now(),
+                updatedAt: Date.now(),
+                deviceType: document.getElementById("device-type") ? document.getElementById("device-type").value : "",
+                quantity: document.getElementById("quantity") ? document.getElementById("quantity").value : "",
+                pickupLocation: document.getElementById("pickup-location") ? document.getElementById("pickup-location").value : ""
+            };
+
+            writeJson(STORAGE_KEYS.request, request);
+            addActivity("New request " + request.id + " was submitted.");
+            pushNotification(STORAGE_KEYS.userNotifications, "Request " + request.id + " submitted successfully.");
+            pushNotification(STORAGE_KEYS.adminNotifications, "New pickup request " + request.id + " needs review.");
+
+            renderDashboardRequest();
+            renderAdminLiveFeed();
+            renderNotifications("user-notification-list", "user-unread-count", STORAGE_KEYS.userNotifications);
+            renderNotifications("admin-notification-list", "admin-unread-count", STORAGE_KEYS.adminNotifications);
+            form.reset();
+        });
+    }
+
+    function wireRemoveRequestButton() {
+        const removeButton = document.getElementById("remove-request-btn");
+        if (!removeButton) {
+            return;
+        }
+
+        removeButton.addEventListener("click", function () {
+            const request = readJson(STORAGE_KEYS.request, null);
+            if (!request) {
                 return;
             }
-            state.requestStatus = "CANCELLED";
-            addActivity(state, "Request " + state.requestId + " cancelled.");
-            addNotification(state, "user", "Request " + state.requestId + " has been cancelled.");
-            addNotification(state, "admin", "User cancelled request " + state.requestId + ".");
-            saveState(state);
-            paintRequest();
+
+            addActivity("Request " + request.id + " was removed by the user.");
+            pushNotification(STORAGE_KEYS.userNotifications, "Request " + request.id + " has been removed.");
+            pushNotification(STORAGE_KEYS.adminNotifications, "Request " + request.id + " was cancelled/removed.");
+
+            localStorage.removeItem(STORAGE_KEYS.request);
+
+            renderDashboardRequest();
+            renderAdminLiveFeed();
+            renderNotifications("user-notification-list", "user-unread-count", STORAGE_KEYS.userNotifications);
+            renderNotifications("admin-notification-list", "admin-unread-count", STORAGE_KEYS.adminNotifications);
         });
-
-        if (markUserReadBtn) {
-            markUserReadBtn.addEventListener("click", function () {
-                markAllRead(state, "user");
-                saveState(state);
-                paintRequest();
-            });
-        }
-
-        if (markUserUnreadBtn) {
-            markUserUnreadBtn.addEventListener("click", function () {
-                markAllUnread(state, "user");
-                saveState(state);
-                paintRequest();
-            });
-        }
-
-        window.addEventListener("storage", function () {
-            const refreshed = loadState();
-            Object.assign(state, refreshed);
-            paintRequest();
-        });
-
-        const recyclerForm = document.getElementById("recycler-search-form");
-        const recyclerResults = document.getElementById("recycler-results");
-        if (recyclerForm && recyclerResults) {
-            const recyclerData = [
-                { name: "WEEE Centre", location: "Nairobi", rating: 4.5, type: "Household e-waste" },
-                { name: "CFSK", location: "Nakuru", rating: 4.2, type: "Business e-waste" },
-                { name: "EACR", location: "Kisumu", rating: 4.0, type: "Batteries and power units" }
-            ];
-
-            recyclerForm.addEventListener("submit", function (event) {
-                event.preventDefault();
-                const location = (document.getElementById("recycler-location").value || "").trim().toLowerCase();
-                const type = document.getElementById("recycler-type").value;
-
-                const matches = recyclerData.filter(function (row) {
-                    const locationMatch = !location || row.location.toLowerCase().includes(location);
-                    const typeMatch = type === "All recyclers" || row.type === type;
-                    return locationMatch && typeMatch;
-                });
-
-                recyclerResults.innerHTML = matches.length
-                    ? matches
-                        .map(function (row) {
-                            return "<li><strong>" + row.name + ":</strong> " + row.location + " | Rating " + row.rating + "</li>";
-                        })
-                        .join("")
-                    : "<li>No certified recyclers match your search.</li>";
-            });
-        }
-
-        paintRequest();
     }
 
-    function setupAdmin(state) {
-        const approvalItems = document.querySelectorAll(".approval-item");
-        if (!approvalItems.length) {
-            return;
-        }
+    function init() {
+        wireDashboardForm();
+        wireRemoveRequestButton();
 
-        const liveStatus = document.getElementById("admin-live-status");
-        const logList = document.getElementById("admin-activity-log");
-        const pendingCountBadge = document.getElementById("pending-approvals-count");
-        const adminNotificationList = document.getElementById("admin-notification-list");
-        const adminUnreadCount = document.getElementById("admin-unread-count");
-        const markAdminReadBtn = document.getElementById("mark-admin-read-btn");
-        const markAdminUnreadBtn = document.getElementById("mark-admin-unread-btn");
+        renderDashboardRequest();
+        renderAdminLiveFeed();
+        renderNotifications("user-notification-list", "user-unread-count", STORAGE_KEYS.userNotifications);
+        renderNotifications("admin-notification-list", "admin-unread-count", STORAGE_KEYS.adminNotifications);
 
-        function paintAdmin() {
-            let pendingCount = 0;
-            approvalItems.forEach(function (item) {
-                const recyclerName = item.getAttribute("data-recycler");
-                const statusBadge = item.querySelector(".recycler-status");
-                const recyclerState = state.recyclers[recyclerName] || "Pending";
-
-                // Items leave the Pending Approvals list once validated/approved.
-                item.style.display = recyclerState === "Pending" ? "block" : "none";
-                if (recyclerState === "Pending") {
-                    pendingCount += 1;
-                }
-
-                if (statusBadge) {
-                    statusBadge.textContent = recyclerState;
-                }
-            });
-
-            if (pendingCountBadge) {
-                pendingCountBadge.textContent = pendingCount + " pending";
-            }
-
-            if (liveStatus) {
-                const counts = Object.values(state.recyclers).reduce(
-                    function (acc, status) {
-                        if (status === "Collected") {
-                            acc.collected += 1;
-                        } else if (status === "Approved") {
-                            acc.approved += 1;
-                        } else if (status === "Validated") {
-                            acc.validated += 1;
-                        } else {
-                            acc.pending += 1;
-                        }
-                        return acc;
-                    },
-                    { approved: 0, validated: 0, collected: 0, pending: 0 }
-                );
-                liveStatus.textContent =
-                    "Collected: " + counts.collected +
-                    " | " +
-                    "Approved: " + counts.approved +
-                    " | Validated: " + counts.validated +
-                    " | Pending: " + counts.pending;
-            }
-
-            if (logList) {
-                logList.innerHTML = state.activityLog.length
-                    ? state.activityLog.map(function (line) { return "<li>" + line + "</li>"; }).join("")
-                    : "<li>No activity yet.</li>";
-            }
-
-            if (adminNotificationList && adminUnreadCount) {
-                const list = state.notifications.admin || [];
-                adminNotificationList.innerHTML = list.length
-                    ? list
-                        .map(function (item) {
-                            return '<li class="' + (item.read ? '' : 'unread') + '">' + item.time + ' - ' + item.message + '</li>';
-                        })
-                        .join("")
-                    : "<li>No notifications yet.</li>";
-                adminUnreadCount.textContent = unreadCount(state, "admin") + " unread";
-            }
-        }
-
-        approvalItems.forEach(function (item) {
-            const recyclerName = item.getAttribute("data-recycler");
-            const approveBtn = item.querySelector(".approve-btn");
-
-            if (approveBtn) {
-                approveBtn.addEventListener("click", function () {
-                    state.recyclers[recyclerName] = "Approved";
-                    addActivity(state, recyclerName + " approved by admin.");
-                    addNotification(state, "admin", recyclerName + " approved.");
-                    addNotification(state, "user", recyclerName + " has been approved for your pickup route.");
-                    syncRequestStatus(state, true);
-                    saveState(state);
-                    paintAdmin();
-                });
-            }
-        });
-
-        if (markAdminReadBtn) {
-            markAdminReadBtn.addEventListener("click", function () {
-                markAllRead(state, "admin");
-                saveState(state);
-                paintAdmin();
-            });
-        }
-
-        if (markAdminUnreadBtn) {
-            markAdminUnreadBtn.addEventListener("click", function () {
-                markAllUnread(state, "admin");
-                saveState(state);
-                paintAdmin();
-            });
-        }
-        window.addEventListener("storage", function () {
-            const refreshed = loadState();
-            Object.assign(state, refreshed);
-            paintAdmin();
-        });
-
-        paintAdmin();
+        setInterval(function () {
+            renderDashboardRequest();
+            renderAdminLiveFeed();
+        }, 5000);
     }
 
-    const state = loadState();
-    saveState(state);
-    setupDashboard(state);
-    setupAdmin(state);
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+    } else {
+        init();
+    }
 })();

@@ -19,7 +19,7 @@
     <main class="container">
         <div class="card">
             <h2>Admin Portal</h2>
-            <p><strong>Name:</strong> John Mangi</p>
+            <p><strong>Name:</strong> <span id="admin-name">Administrator</span></p>
             <p><strong>Role:</strong> Administrator</p>
             <br>
             <a href="login.html" class="btn" style="width:100%;">Logout</a>
@@ -182,6 +182,28 @@
             </div>
         </div>
     </main>
+    <script>
+        (function () {
+            const adminName = document.getElementById("admin-name");
+            if (!adminName) {
+                return;
+            }
+
+            const rawCurrentUser = localStorage.getItem("ewaste_current_user");
+            if (!rawCurrentUser) {
+                return;
+            }
+
+            try {
+                const currentUser = JSON.parse(rawCurrentUser);
+                if (currentUser && currentUser.fullName) {
+                    adminName.textContent = currentUser.fullName;
+                }
+            } catch (error) {
+                // Keep the default name when stored session data is invalid.
+            }
+        })();
+    </script>
     <script src="../Java/live-status.js"></script>
 </body>
 </html>
