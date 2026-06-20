@@ -11,7 +11,7 @@
 	<div class="card" style="max-width: 700px; margin: auto;">
 		<h1>Create Account</h1>
 
-		<form method="post" action="#" aria-label="Sign up form">
+		<form id="signup-form" method="post" action="#" aria-label="Sign up form">
 			<div class="grid-container">
 				<div>
 					<label for="full-name">Full Name</label>
@@ -45,6 +45,7 @@
 				<div>
 					<label for="confirm-password">Confirm Password</label>
 					<input id="confirm-password" name="confirmPassword" type="password" placeholder="Confirm password" required>
+					<small id="signup-error" style="display: none; color: #b00020; margin-top: 6px;">Passwords do not match.</small>
 				</div>
 			</div>
 					
@@ -53,6 +54,31 @@
 		</form>
 	</div>
 </main>
+<script>
+	(function () {
+		const signupForm = document.getElementById("signup-form");
+		const passwordInput = document.getElementById("password");
+		const confirmPasswordInput = document.getElementById("confirm-password");
+		const errorText = document.getElementById("signup-error");
+
+		if (!signupForm || !passwordInput || !confirmPasswordInput || !errorText) {
+			return;
+		}
+
+		signupForm.addEventListener("submit", function (event) {
+			event.preventDefault();
+
+			if (passwordInput.value !== confirmPasswordInput.value) {
+				errorText.style.display = "block";
+				confirmPasswordInput.focus();
+				return;
+			}
+
+			errorText.style.display = "none";
+			window.location.href = "login.html";
+		});
+	})();
+</script>
 </body>
 </html>
 
