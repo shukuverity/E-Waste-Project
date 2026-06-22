@@ -77,6 +77,11 @@
 				return;
 			}
 
+			if (account.role === "Recycler") {
+				window.location.href = "recycler.html";
+				return;
+			}
+
 			window.location.href = "dashboard.html";
 		});
 	})();

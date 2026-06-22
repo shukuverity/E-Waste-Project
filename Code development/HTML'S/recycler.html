@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recycler Dashboard</title>
+    <link rel="stylesheet" href="../CSS/style.css">
+</head>
+<body>
+    <header class="navbar">
+        <h1>E-waste Recycler Dashboard</h1>
+        <nav>
+            <a href="contact.html" class="btn">Contact</a>
+            <a href="login.html" class="btn">Logout</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="card">
+            <h2>Recycler Portal</h2>
+            <p><strong>Company Name:</strong> <span id="recycler-name">Not registered</span></p>
+            <p><strong>Recycler Type:</strong> <span id="recycler-type-display">Not set</span></p>
+            <p><strong>Certification:</strong> <span id="recycler-status" class="status-chip status-pending">Pending Approval</span></p>
+            <p class="muted">Your facility is visible to users after NEMA license verification by admin.</p>
+        </div>
+
+        <div class="card">
+            <h2>Facility Registration</h2>
+            <form id="registration-form" action="#" method="post">
+                <div class="grid-container">
+                    <div>
+                        <label for="facility-name">Company Name</label>
+                        <input id="facility-name" type="text" required>
+                    </div>
+                    <div>
+                        <label for="facility-location">Location</label>
+                        <input id="facility-location" type="text" placeholder="e.g. Nairobi" required>
+                    </div>
+                    <div>
+                        <label for="nema-license">NEMA Certificate ID</label>
+                        <input id="nema-license" type="text" placeholder="NEMA-001" required>
+                    </div>
+                    <div>
+                        <label for="recycler-type">Recycler Type</label>
+                        <select id="recycler-type" required>
+                            <option value="All recyclers">All recyclers</option>
+                            <option value="Household">Household</option>
+                            <option value="Industrial">Industrial</option>
+                        </select>
+                    </div>
+                    <div style="grid-column: 1 / -1;">
+                        <label for="facility-phone">Contact Phone</label>
+                        <input id="facility-phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn" type="submit">Save Registration</button>
+                    <button id="approve-btn" class="btn secondary" type="button">Simulate Approval</button>
+                </div>
+                <p id="registration-note" class="small-note">Registration will be reviewed by admin.</p>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Pickup Requests</h2>
+                <p class="muted">Move requests through Java status flow: SUBMITTED, SCHEDULED, IN_TRANSIT, COMPLETED, CANCELLED.</p>
+
+            <div class="request-item" data-request-id="REQ-1001">
+                <div class="card-header">
+                    <h3>REQ-1001</h3>
+                    <span class="status-chip status-submitted request-status">Submitted</span>
+                </div>
+                <div class="request-grid">
+                    <p><strong>Waste Items:</strong> Laptops and Chargers</p>
+                    <p><strong>Quantity:</strong> 3</p>
+                    <p><strong>Customer Location:</strong> Nairobi CBD</p>
+                    <p><strong>Scheduled Time:</strong> 11:00 - 13:00</p>
+                </div>
+                <div class="form-actions">
+                    <button class="btn request-action" type="button" data-action="accept">Accept</button>
+                    <button class="btn secondary request-action" type="button" data-action="reject">Reject</button>
+                    <button class="btn request-action" type="button" data-action="complete">Complete</button>
+                </div>
+                <p class="small-note request-note">Awaiting recycler action.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Facility Profile Update</h2>
+            <form id="profile-form" action="#" method="post">
+                <div class="grid-container">
+                    <div>
+                        <label for="operating-hours">Operating Hours</label>
+                        <input id="operating-hours" type="text" placeholder="Mon-Sat 08:00-18:00" required>
+                    </div>
+                    <div>
+                        <label for="daily-capacity">Daily Capacity (kg)</label>
+                        <input id="daily-capacity" type="number" min="1" required>
+                    </div>
+                    <div style="grid-column: 1 / -1;">
+                        <label for="accepted-types">Accepted Waste Types</label>
+                        <input id="accepted-types" type="text" placeholder="Phones, Laptops, Batteries" required>
+                    </div>
+                </div>
+                <button class="btn" type="submit">Update Profile</button>
+                <p id="profile-note" class="small-note">No recent profile updates.</p>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Weekly Summary</h2>
+            <div class="overview-grid">
+                <div class="overview-item">
+                    <h3 id="summary-weight">8.5 kg</h3>
+                    <p>Total weight received</p>
+                </div>
+                <div class="overview-item">
+                    <h3 id="summary-pickups">1</h3>
+                    <p>Pickups completed</p>
+                </div>
+                <div class="overview-item">
+                    <h3 id="summary-points">85 pts</h3>
+                    <p>Points awarded to customers</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        (function () {
+            const recyclerName = document.getElementById("recycler-name");
+            const recyclerTypeDisplay = document.getElementById("recycler-type-display");
+            const recyclerRating = document.getElementById("recycler-rating");
+            const recyclerStatus = document.getElementById("recycler-status");
+            const registrationForm = document.getElementById("registration-form");
+            const approveButton = document.getElementById("approve-btn");
+            const registrationNote = document.getElementById("registration-note");
+            const profileForm = document.getElementById("profile-form");
+            const profileNote = document.getElementById("profile-note");
+            const summaryPickups = document.getElementById("summary-pickups");
+            let pickupCount = 0;
+            let certified = false;
+
+            if (!registrationForm || !approveButton || !recyclerName || !recyclerStatus || !recyclerTypeDisplay || !summaryPickups) {
+                return;
+            }
+
+            const ratings = JSON.parse(localStorage.getItem("ewaste_recycler_ratings") || "[]");
+            const scores = ratings
+                .map(function (item) { return Number(item.score); })
+                .filter(function (value) { return Number.isFinite(value) && value >= 1 && value <= 5; });
+            if (scores.length && recyclerRating) {
+                const total = scores.reduce(function (sum, value) { return sum + value; }, 0);
+                recyclerRating.textContent = (total / scores.length).toFixed(1);
+            }
+
+            registrationForm.addEventListener("submit", function (event) {
+                event.preventDefault();
+                const name = document.getElementById("facility-name").value.trim();
+                const type = document.getElementById("recycler-type").value;
+                const ratingInput = document.getElementById("recycler-rating-input");
+                const ratingValue = ratingInput ? Number(ratingInput.value) : NaN;
+                recyclerName.textContent = name || "Not registered";
+                recyclerTypeDisplay.textContent = type;
+                if (recyclerRating) {
+                    recyclerRating.textContent = Number.isFinite(ratingValue) ? ratingValue.toFixed(1) : recyclerRating.textContent || "0.0";
+                }
+                recyclerStatus.className = "status-chip status-pending";
+                recyclerStatus.textContent = "Pending Approval";
+                certified = false;
+                registrationNote.textContent = "Registration submitted. Waiting for admin verification.";
+            });
+
+            approveButton.addEventListener("click", function () {
+                recyclerStatus.className = "status-chip status-active";
+                recyclerStatus.textContent = "Approved And Active";
+                certified = true;
+                registrationNote.textContent = "Facility approved. You are now visible to users.";
+            });
+
+            document.querySelectorAll(".request-action").forEach(function (button) {
+                button.addEventListener("click", function () {
+                    const requestItem = button.closest(".request-item");
+                    const status = requestItem ? requestItem.querySelector(".request-status") : null;
+                    const note = requestItem ? requestItem.querySelector(".request-note") : null;
+                    const action = button.getAttribute("data-action");
+
+                    if (!status || !note || !action) {
+                        return;
+                    }
+
+                    if (action === "accept") {
+                        status.className = "status-chip status-accepted request-status";
+                        status.textContent = "SCHEDULED";
+                        note.textContent = "Pickup scheduled.";
+                        return;
+                    }
+
+                    if (action === "reject") {
+                        const reason = window.prompt("Enter rejection reason:", "");
+                        if (!reason || !reason.trim()) {
+                            return;
+                        }
+                        status.className = "status-chip status-rejected request-status";
+                        status.textContent = "CANCELLED";
+                        note.textContent = "Cancelled. Reason: " + reason.trim();
+                        return;
+                    }
+
+                    if (status.textContent === "SCHEDULED") {
+                        status.className = "status-chip status-submitted request-status";
+                        status.textContent = "IN_TRANSIT";
+                        note.textContent = "Pickup in transit.";
+                        return;
+                    }
+
+                    status.className = "status-chip status-completed request-status";
+                    status.textContent = "COMPLETED";
+                    note.textContent = "Pickup completed. Actual weight recorded.";
+                    pickupCount += 1;
+                    summaryPickups.textContent = String(pickupCount);
+                });
+            });
+
+            if (profileForm && profileNote) {
+                profileForm.addEventListener("submit", function (event) {
+                    event.preventDefault();
+                    profileNote.textContent = "Profile updated and synced.";
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

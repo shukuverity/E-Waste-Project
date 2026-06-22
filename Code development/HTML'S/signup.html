@@ -25,7 +25,7 @@
 				
 				<div>
 					<label for="phone">Phone Number</label>
-					<input id="phone" name="phoneNumber" type="tel" placeholder="Enter phone number" required>
+					<input id="phone" name="phoneNumber" type="tel" placeholder="Enter 10-digit phone number" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required>
 				</div>
 						
 				<div>
@@ -92,6 +92,16 @@
 			errorText.style.display = "none";
 			errorText.textContent = "Passwords do not match.";
 
+			const sanitizedPhone = phoneInput.value.replace(/\D/g, "").slice(0, 10);
+			phoneInput.value = sanitizedPhone;
+
+			if (sanitizedPhone.length !== 10) {
+				errorText.textContent = "Phone number must be exactly 10 digits.";
+				errorText.style.display = "block";
+				phoneInput.focus();
+				return;
+			}
+
 			if (passwordInput.value !== confirmPasswordInput.value) {
 				errorText.style.display = "block";
 				confirmPasswordInput.focus();
@@ -114,13 +124,20 @@
 			accounts.push({
 				fullName: fullNameInput.value.trim(),
 				email: email,
-				phoneNumber: phoneInput.value.trim(),
+				phoneNumber: sanitizedPhone,
 				role: roleInput.value,
 				password: passwordInput.value
 			});
 
 			saveAccounts(accounts);
 			window.location.href = "login.html";
+		});
+
+		phoneInput.addEventListener("input", function () {
+			const onlyDigits = phoneInput.value.replace(/\D/g, "").slice(0, 10);
+			if (phoneInput.value !== onlyDigits) {
+				phoneInput.value = onlyDigits;
+			}
 		});
 	})();
 </script>

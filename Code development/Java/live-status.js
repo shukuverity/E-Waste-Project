@@ -5,7 +5,8 @@
         request: "ewaste_latest_request",
         activity: "ewaste_activity_log",
         userNotifications: "ewaste_user_notifications",
-        adminNotifications: "ewaste_admin_notifications"
+        adminNotifications: "ewaste_admin_notifications",
+        recyclerRatings: "ewaste_recycler_ratings"
     };
 
     const STATUS_FLOW = ["SUBMITTED", "SCHEDULED", "IN_TRANSIT", "COMPLETED"];
@@ -25,6 +26,11 @@
 
     function writeJson(key, value) {
         localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    function getCurrentUserEmail() {
+        const currentUser = readJson("ewaste_current_user", null);
+        return currentUser && currentUser.email ? currentUser.email : "guest@local";
     }
 
     function formatStatus(status) {
@@ -265,17 +271,107 @@
         });
     }
 
+    function renderRecyclerRating() {
+        const section = document.getElementById("recycler-rating-section");
+        const form = document.getElementById("recycler-rating-form");
+        const valueInput = document.getElementById("recycler-rating-value");
+        const note = document.getElementById("recycler-rating-note");
+        const request = readJson(STORAGE_KEYS.request, null);
+
+        if (!section || !form || !valueInput || !note) {
+            return;
+        }
+
+        if (!request || request.status !== "COMPLETED") {
+            section.style.display = "none";
+            return;
+        }
+
+        section.style.display = "block";
+
+        const ratings = readJson(STORAGE_KEYS.recyclerRatings, []);
+        const userEmail = getCurrentUserEmail();
+        const existingRating = ratings.find(function (item) {
+            return item.requestId === request.id && item.userEmail === userEmail;
+        });
+
+        if (existingRating) {
+            valueInput.value = String(existingRating.score);
+            valueInput.disabled = true;
+            note.textContent = "You already rated this completed request.";
+            return;
+        }
+
+        valueInput.disabled = false;
+        note.textContent = "Rate your recycler for request " + request.id + ".";
+    }
+
+    function wireRecyclerRatingForm() {
+        const form = document.getElementById("recycler-rating-form");
+        if (!form || form.dataset.bound) {
+            return;
+        }
+
+        form.dataset.bound = "true";
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const request = readJson(STORAGE_KEYS.request, null);
+            const scoreInput = document.getElementById("recycler-rating-value");
+            const commentInput = document.getElementById("recycler-rating-comment");
+            const note = document.getElementById("recycler-rating-note");
+            if (!request || request.status !== "COMPLETED" || !scoreInput || !note) {
+                return;
+            }
+
+            const score = Number(scoreInput.value);
+            if (!Number.isFinite(score) || score < 1 || score > 5) {
+                note.textContent = "Please select a rating between 1 and 5.";
+                return;
+            }
+
+            const ratings = readJson(STORAGE_KEYS.recyclerRatings, []);
+            const userEmail = getCurrentUserEmail();
+            const alreadyRated = ratings.some(function (item) {
+                return item.requestId === request.id && item.userEmail === userEmail;
+            });
+
+            if (alreadyRated) {
+                note.textContent = "You already rated this completed request.";
+                return;
+            }
+
+            ratings.unshift({
+                requestId: request.id,
+                userEmail: userEmail,
+                score: score,
+                comment: commentInput ? commentInput.value.trim() : "",
+                recyclerId: "default_recycler",
+                createdAt: Date.now()
+            });
+
+            writeJson(STORAGE_KEYS.recyclerRatings, ratings.slice(0, 100));
+            scoreInput.disabled = true;
+            note.textContent = "Thanks. Your rating was submitted.";
+            addActivity("User rated recycler " + score + "/5 for request " + request.id + ".");
+            pushNotification(STORAGE_KEYS.adminNotifications, "New recycler rating: " + score + "/5 for request " + request.id + ".");
+        });
+    }
+
     function init() {
         wireDashboardForm();
         wireRemoveRequestButton();
+        wireRecyclerRatingForm();
 
         renderDashboardRequest();
+        renderRecyclerRating();
         renderAdminLiveFeed();
         renderNotifications("user-notification-list", "user-unread-count", STORAGE_KEYS.userNotifications);
         renderNotifications("admin-notification-list", "admin-unread-count", STORAGE_KEYS.adminNotifications);
 
         setInterval(function () {
             renderDashboardRequest();
+            renderRecyclerRating();
             renderAdminLiveFeed();
         }, 5000);
     }
