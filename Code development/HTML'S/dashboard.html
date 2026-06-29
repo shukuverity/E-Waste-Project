@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-waste Platform Dashboard</title>
     <link rel="stylesheet" href="../CSS/style.css">
+    
+    
 </head>
 <body>
     <header class="navbar">
@@ -61,7 +63,8 @@
                     </div>
                     <div>
                         <label for="pickup-location">Pickup Location</label>
-                        <input id="pickup-location" name="pickupLocation" type="text" placeholder="Enter location" required>
+                        <input type="text" id="location-input" name="pickupLocation" placeholder="Start typing..." required>
+                        <div id="pickup-suggestions" class="suggestions-box"></div>
                     </div>
                     <div>
                         <label for="preferred-time">Preferred Time</label>
@@ -146,7 +149,8 @@
                 <div class="container">
                     <div>
                         <label for="recycler-location">Location</label>
-                        <input id="recycler-location" name="location" type="text" placeholder="Enter your town or county">
+                        <input id="dropoff-input" name="location" type="text" placeholder="Enter your town or county" required>
+                        <div id="dropoff-suggestions" class="suggestions-box"></div>
                     </div>
                     <div>
                         <label for="recycler-type">Recycler Type</label>
@@ -172,7 +176,6 @@
 
 </main>
     <script src="../Java/live-status.js"></script>
-    <script src="../Java/app.js"></script>
-    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZaVc4gaOJgapFSDU2-wSY8f1B8Kct0Fg&libraries=places&callback=initAutocomplete"></script>
+    <script src="../Java/leaflet.js"></script>
 </body>
 </html>
