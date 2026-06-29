@@ -31,24 +31,35 @@ public class DBOperations {
 
     // READ USERS
     public void getUsers() {
-    // This query looks up the exact check constraint definition for your roles column
-    String sql = "SELECT check_clause FROM information_schema.check_constraints " +
-                 "WHERE constraint_name = 'users_role_check'";
-    
-    try (Connection conn = DBConnection.getConnection();
-         PreparedStatement pst = conn.prepareStatement(sql);
-         ResultSet rs = pst.executeQuery()) {
-         
-        System.out.println("--- ALLOWED ROLES IN YOUR CONSTRAINT ---");
-        if (rs.next()) {
-            System.out.println("Your constraint rule is: " + rs.getString("check_clause"));
-        } else {
-            System.out.println("Could not read constraint details directly. Try lower-case 'household'.");
+        String sql = "SELECT id, full_name, email, phone, role, address, created_at FROM users ORDER BY id";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pst = conn.prepareStatement(sql);
+             ResultSet rs = pst.executeQuery()) {
+
+            System.out.println("--- USERS LIST ---");
+            boolean foundAny = false;
+
+            while (rs.next()) {
+                foundAny = true;
+                System.out.println(
+                    "ID: " + rs.getInt("id")
+                    + " | Name: " + rs.getString("full_name")
+                    + " | Email: " + rs.getString("email")
+                    + " | Phone: " + rs.getString("phone")
+                    + " | Role: " + rs.getString("role")
+                    + " | Address: " + rs.getString("address")
+                    + " | Created: " + rs.getTimestamp("created_at")
+                );
+            }
+
+            if (!foundAny) {
+                System.out.println("No users found in the users table.");
+            }
+
+            System.out.println("------------------");
+        } catch (SQLException e) {
+            System.err.println("Read error: " + e.getMessage());
         }
-        System.out.println("----------------------------------------");
-        
-    } catch (SQLException e) {
-        System.err.println("Inspection error: " + e.getMessage());
-    }
     }
 }

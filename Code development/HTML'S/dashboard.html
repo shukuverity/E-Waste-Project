@@ -18,8 +18,8 @@
 <main class="container">
         <div class="card">
             <h2>Your Points</h2>
-            <p><b><i>1,250</i>pts</b></p>
-            <p>Total Earned: <strong>2,000</strong><i>pts</i>    |   Redeemed: <strong>750</strong><i>pts</i></p>
+            <p><b><i id="points-balance">0 pts</i></b></p>
+            <p>Total Earned: <strong id="points-earned">0</strong><i>pts</i>    |   Redeemed: <strong id="points-redeemed">0</strong><i>pts</i></p>
 
             <button class="btn">
                 REDEEM POINTS
@@ -62,9 +62,6 @@
                     <div>
                         <label for="pickup-location">Pickup Location</label>
                         <input id="pickup-location" name="pickupLocation" type="text" placeholder="Enter location" required>
-                        <gmp-map center="40.7128,-74.0060" zoom="13" map-id="DEMO_MAP_ID">
-                        <gmp-advanced-marker position="40.7128,-74.0060" title="My Location"></gmp-advanced-marker>
-                        </gmp-map>
                     </div>
                     <div>
                         <label for="preferred-time">Preferred Time</label>
@@ -175,5 +172,7 @@
 
 </main>
     <script src="../Java/live-status.js"></script>
+    <script src="../Java/app.js"></script>
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZaVc4gaOJgapFSDU2-wSY8f1B8Kct0Fg&libraries=places&callback=initAutocomplete"></script>
 </body>
 </html>

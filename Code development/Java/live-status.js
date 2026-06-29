@@ -33,6 +33,45 @@
         return currentUser && currentUser.email ? currentUser.email : "guest@local";
     }
 
+    function getAccounts() {
+        return readJson("ewaste_accounts", []);
+    }
+
+    function saveAccounts(accounts) {
+        writeJson("ewaste_accounts", accounts);
+    }
+
+    function renderUserPointsCard() {
+        const balanceElement = document.getElementById("points-balance");
+        const earnedElement = document.getElementById("points-earned");
+        const redeemedElement = document.getElementById("points-redeemed");
+
+        if (!balanceElement || !earnedElement || !redeemedElement) {
+            return;
+        }
+
+        const currentUser = readJson("ewaste_current_user", null);
+        if (!currentUser || !currentUser.email) {
+            balanceElement.textContent = "0 pts";
+            earnedElement.textContent = "0";
+            redeemedElement.textContent = "0";
+            return;
+        }
+
+        const accounts = getAccounts();
+        const account = accounts.find(function (item) {
+            return item.email === currentUser.email;
+        });
+
+        const pointsBalance = account && Number.isFinite(Number(account.pointsBalance)) ? Number(account.pointsBalance) : 0;
+        const totalPointsEarned = account && Number.isFinite(Number(account.totalPointsEarned)) ? Number(account.totalPointsEarned) : 0;
+        const totalPointsRedeemed = account && Number.isFinite(Number(account.totalPointsRedeemed)) ? Number(account.totalPointsRedeemed) : 0;
+
+        balanceElement.textContent = pointsBalance + " pts";
+        earnedElement.textContent = String(totalPointsEarned);
+        redeemedElement.textContent = String(totalPointsRedeemed);
+    }
+
     function formatStatus(status) {
         return String(status || "").replace(/_/g, " ").toLowerCase().replace(/\b\w/g, function (char) {
             return char.toUpperCase();
@@ -56,10 +95,6 @@
 
         const createdAt = Number(request.createdAt || Date.now());
         const elapsedSeconds = Math.floor((Date.now() - createdAt) / 1000);
-
-        if (elapsedSeconds >= 45) {
-            return "COMPLETED";
-        }
 
         if (elapsedSeconds >= 30) {
             return "IN_TRANSIT";
@@ -228,9 +263,13 @@
                 status: "SUBMITTED",
                 createdAt: Date.now(),
                 updatedAt: Date.now(),
+                rewardGranted: false,
+                rewardedPoints: 0,
+                userEmail: getCurrentUserEmail(),
                 deviceType: document.getElementById("device-type") ? document.getElementById("device-type").value : "",
                 quantity: document.getElementById("quantity") ? document.getElementById("quantity").value : "",
-                pickupLocation: document.getElementById("pickup-location") ? document.getElementById("pickup-location").value : ""
+                pickupLocation: document.getElementById("pickup-location") ? document.getElementById("pickup-location").value : "",
+                weightKg: document.getElementById("weight-kg") ? Number(document.getElementById("weight-kg").value || 0) : 0
             };
 
             writeJson(STORAGE_KEYS.request, request);
@@ -365,6 +404,7 @@
 
         renderDashboardRequest();
         renderRecyclerRating();
+        renderUserPointsCard();
         renderAdminLiveFeed();
         renderNotifications("user-notification-list", "user-unread-count", STORAGE_KEYS.userNotifications);
         renderNotifications("admin-notification-list", "admin-unread-count", STORAGE_KEYS.adminNotifications);
@@ -372,6 +412,7 @@
         setInterval(function () {
             renderDashboardRequest();
             renderRecyclerRating();
+            renderUserPointsCard();
             renderAdminLiveFeed();
         }, 5000);
     }

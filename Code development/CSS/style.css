@@ -136,11 +136,6 @@ a.btn.secondary:visited:hover {
 	background: var(--primary);
 }
 
-gmp-map {
-            height: 500px;
-            width: 100%;
-        }
-
 form {
 	display: block;
 }

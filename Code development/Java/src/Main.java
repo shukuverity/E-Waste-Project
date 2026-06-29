@@ -48,7 +48,10 @@ public class Main {
 
 		System.out.println("Created request: " + request.getRequestId() + " | Status: " + request.getStatus());
 		advanceTrackingStatus(request.getRequestId());
+		advanceTrackingStatus(request.getRequestId());
+		confirmPickupByRecycler(request.getRequestId(), "WEEE Centre");
 		System.out.println("Updated request status: " + request.getStatus());
+		System.out.println("User points balance: " + loggedIn.getPointsBalance());
 
 		List<Recycler> found = searchRecyclerFromDashboard("Nairobi", "All recyclers");
 		System.out.println("Recyclers found: " + found.size());
@@ -124,11 +127,6 @@ public class Main {
 
 		requests.add(request);
 
-		User user = findUserByEmail(userEmail);
-		if (user != null) {
-			user.addPoints(request.calculateAwardedPoints());
-		}
-
 		return request;
 	}
 
@@ -137,8 +135,45 @@ public class Main {
 		if (request == null) {
 			return null;
 		}
+		if (request.getStatus() == WasteRequest.Status.COMPLETED
+				|| request.getStatus() == WasteRequest.Status.CANCELLED) {
+			return request;
+		}
 		request.advanceStatus();
 		return request;
+	}
+
+	public static String confirmPickupByRecycler(String requestId, String recyclerName) {
+		WasteRequest request = findRequestById(requestId);
+		if (request == null) {
+			return "Request not found: " + requestId;
+		}
+
+		Recycler recycler = findRecyclerByName(recyclerName);
+		if (recycler == null) {
+			return "Recycler not found: " + recyclerName;
+		}
+
+		if (request.getStatus() == WasteRequest.Status.CANCELLED) {
+			return "Request " + requestId + " is cancelled and cannot be confirmed.";
+		}
+
+		while (request.getStatus() != WasteRequest.Status.COMPLETED) {
+			request.advanceStatus();
+		}
+
+		recycler.incrementPickupCount();
+
+		int awardedPoints = 0;
+		User requestOwner = findUserByEmail(request.getUserEmail());
+		if (requestOwner != null && request.markRewardGranted()) {
+			awardedPoints = request.calculateAwardedPoints();
+			requestOwner.addPoints(awardedPoints);
+		}
+
+		return "Pickup confirmed for " + requestId
+				+ " by " + recycler.getCompanyName()
+				+ ". Points awarded: " + awardedPoints;
 	}
 
 	public static boolean removeRequest(String requestId) {

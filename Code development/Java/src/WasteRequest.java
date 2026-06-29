@@ -19,6 +19,7 @@ public class WasteRequest {
 	private double weightKg;
 	private String requestDetails;
 	private Status status;
+	private boolean rewardGranted;
 
 	public WasteRequest(String requestId, String userEmail, String deviceType, int quantity, String condition,
 						String pickupDate, String pickupLocation, String preferredTime, double weightKg,
@@ -34,6 +35,7 @@ public class WasteRequest {
 		this.weightKg = weightKg;
 		this.requestDetails = requestDetails;
 		this.status = Status.SUBMITTED;
+		this.rewardGranted = false;
 	}
 
 	public String getRequestId() {
@@ -80,6 +82,10 @@ public class WasteRequest {
 		return status;
 	}
 
+	public boolean isRewardGranted() {
+		return rewardGranted;
+	}
+
 	public int calculateAwardedPoints() {
 		return (int) Math.round(weightKg * 10);
 	}
@@ -102,5 +108,13 @@ public class WasteRequest {
 
 	public void cancel() {
 		this.status = Status.CANCELLED;
+	}
+
+	public boolean markRewardGranted() {
+		if (rewardGranted) {
+			return false;
+		}
+		rewardGranted = true;
+		return true;
 	}
 }

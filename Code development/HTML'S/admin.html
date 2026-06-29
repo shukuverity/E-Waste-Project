@@ -62,30 +62,7 @@
                     <span class="badge" id="pending-approvals-count">0 pending</span>
                 </div>
             </div>
-
-            <div class="approval-item" data-recycler="GreenTech">
-            <p><strong>GreenTech</strong></p>
-            <p>NEMA-001 | 2026-05-20</p>
-            <p>Status: <span class="badge recycler-status">Pending</span></p>
-            <button class="btn approve-btn" type="button">Approve</button>
-            <br>
-            </div>
-
-            <div class="approval-item" data-recycler="EcoCycle">
-            <p><strong>EcoCycle</strong></p>
-            <p>NEMA-002 | 2026-05-07</p>
-            <p>Status: <span class="badge recycler-status">Pending</span></p>
-            <button class="btn approve-btn" type="button">Approve</button>
-            <br>
-            </div>
-
-            <div class="approval-item" data-recycler="RecycleHub">
-            <p><strong>RecycleHub</strong></p>
-            <p>NEMA-003 | 2026-05-18</p>
-            <p>Status: <span class="badge recycler-status">Pending</span></p>
-            <button class="btn approve-btn" type="button">Approve</button>
-            <br>
-            </div>
+            <div id="pending-approvals-list"></div>
         </div>
 
         <div class="card">
@@ -182,29 +159,8 @@
             </div>
         </div>
     </main>
-    <script>
-        (function () {
-            const adminName = document.getElementById("admin-name");
-            if (!adminName) {
-                return;
-            }
-
-            const rawCurrentUser = localStorage.getItem("ewaste_current_user");
-            if (!rawCurrentUser) {
-                return;
-            }
-
-            try {
-                const currentUser = JSON.parse(rawCurrentUser);
-                if (currentUser && currentUser.fullName) {
-                    adminName.textContent = currentUser.fullName;
-                }
-            } catch (error) {
-                // Keep the default name when stored session data is invalid.
-            }
-        })();
-    </script>
-    <script src="../Java/live-status.js"></script>
+     <script src="../Java/admin.js"></script>
+   <script src="../Java/live-status.js"></script>
 </body>
 </html>
 

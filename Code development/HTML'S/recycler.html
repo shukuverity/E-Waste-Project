@@ -79,7 +79,7 @@
                 <div class="form-actions">
                     <button class="btn request-action" type="button" data-action="accept">Accept</button>
                     <button class="btn secondary request-action" type="button" data-action="reject">Reject</button>
-                    <button class="btn request-action" type="button" data-action="complete">Complete</button>
+                    <button class="btn request-action" type="button" data-action="complete">Confirm Pickup</button>
                 </div>
                 <p class="small-note request-note">Awaiting recycler action.</p>
             </div>
@@ -125,110 +125,6 @@
             </div>
         </div>
     </main>
-
-    <script>
-        (function () {
-            const recyclerName = document.getElementById("recycler-name");
-            const recyclerTypeDisplay = document.getElementById("recycler-type-display");
-            const recyclerRating = document.getElementById("recycler-rating");
-            const recyclerStatus = document.getElementById("recycler-status");
-            const registrationForm = document.getElementById("registration-form");
-            const approveButton = document.getElementById("approve-btn");
-            const registrationNote = document.getElementById("registration-note");
-            const profileForm = document.getElementById("profile-form");
-            const profileNote = document.getElementById("profile-note");
-            const summaryPickups = document.getElementById("summary-pickups");
-            let pickupCount = 0;
-            let certified = false;
-
-            if (!registrationForm || !approveButton || !recyclerName || !recyclerStatus || !recyclerTypeDisplay || !summaryPickups) {
-                return;
-            }
-
-            const ratings = JSON.parse(localStorage.getItem("ewaste_recycler_ratings") || "[]");
-            const scores = ratings
-                .map(function (item) { return Number(item.score); })
-                .filter(function (value) { return Number.isFinite(value) && value >= 1 && value <= 5; });
-            if (scores.length && recyclerRating) {
-                const total = scores.reduce(function (sum, value) { return sum + value; }, 0);
-                recyclerRating.textContent = (total / scores.length).toFixed(1);
-            }
-
-            registrationForm.addEventListener("submit", function (event) {
-                event.preventDefault();
-                const name = document.getElementById("facility-name").value.trim();
-                const type = document.getElementById("recycler-type").value;
-                const ratingInput = document.getElementById("recycler-rating-input");
-                const ratingValue = ratingInput ? Number(ratingInput.value) : NaN;
-                recyclerName.textContent = name || "Not registered";
-                recyclerTypeDisplay.textContent = type;
-                if (recyclerRating) {
-                    recyclerRating.textContent = Number.isFinite(ratingValue) ? ratingValue.toFixed(1) : recyclerRating.textContent || "0.0";
-                }
-                recyclerStatus.className = "status-chip status-pending";
-                recyclerStatus.textContent = "Pending Approval";
-                certified = false;
-                registrationNote.textContent = "Registration submitted. Waiting for admin verification.";
-            });
-
-            approveButton.addEventListener("click", function () {
-                recyclerStatus.className = "status-chip status-active";
-                recyclerStatus.textContent = "Approved And Active";
-                certified = true;
-                registrationNote.textContent = "Facility approved. You are now visible to users.";
-            });
-
-            document.querySelectorAll(".request-action").forEach(function (button) {
-                button.addEventListener("click", function () {
-                    const requestItem = button.closest(".request-item");
-                    const status = requestItem ? requestItem.querySelector(".request-status") : null;
-                    const note = requestItem ? requestItem.querySelector(".request-note") : null;
-                    const action = button.getAttribute("data-action");
-
-                    if (!status || !note || !action) {
-                        return;
-                    }
-
-                    if (action === "accept") {
-                        status.className = "status-chip status-accepted request-status";
-                        status.textContent = "SCHEDULED";
-                        note.textContent = "Pickup scheduled.";
-                        return;
-                    }
-
-                    if (action === "reject") {
-                        const reason = window.prompt("Enter rejection reason:", "");
-                        if (!reason || !reason.trim()) {
-                            return;
-                        }
-                        status.className = "status-chip status-rejected request-status";
-                        status.textContent = "CANCELLED";
-                        note.textContent = "Cancelled. Reason: " + reason.trim();
-                        return;
-                    }
-
-                    if (status.textContent === "SCHEDULED") {
-                        status.className = "status-chip status-submitted request-status";
-                        status.textContent = "IN_TRANSIT";
-                        note.textContent = "Pickup in transit.";
-                        return;
-                    }
-
-                    status.className = "status-chip status-completed request-status";
-                    status.textContent = "COMPLETED";
-                    note.textContent = "Pickup completed. Actual weight recorded.";
-                    pickupCount += 1;
-                    summaryPickups.textContent = String(pickupCount);
-                });
-            });
-
-            if (profileForm && profileNote) {
-                profileForm.addEventListener("submit", function (event) {
-                    event.preventDefault();
-                    profileNote.textContent = "Profile updated and synced.";
-                });
-            }
-        })();
-    </script>
+     <script src="../Java/recycler.js"></script>
 </body>
 </html>
