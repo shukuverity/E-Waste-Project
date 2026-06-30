@@ -11,7 +11,7 @@
 <div class="card" style="max-width: 600px; margin: auto;">
 	<h2>Welcome Back</h2>
 
-	<form id="login-form" method="post" action="#" aria-label="Login form">
+	<form id="login-form" method="post" action="LoginServlet" aria-label="Login form">
 		<div style="margin-bottom: 20px;">
 			<label for="login-email">Email Address</label>
 			<input id="login-email" name="email" type="email" placeholder="Enter your email" required>
@@ -29,63 +29,6 @@
 	<p style="margin-top: 20px;">No account? <a href="signup.html">Sign up</a></p>
 </div>
 </main>
-<script>
-	(function () {
-		const loginForm = document.getElementById("login-form");
-		const emailInput = document.getElementById("login-email");
-		const passwordInput = document.getElementById("login-password");
-		const errorText = document.getElementById("login-error");
-
-		if (!loginForm || !emailInput || !passwordInput || !errorText) {
-			return;
-		}
-
-		function getAccounts() {
-			const rawAccounts = localStorage.getItem("ewaste_accounts");
-			if (!rawAccounts) {
-				return [];
-			}
-
-			try {
-				const parsed = JSON.parse(rawAccounts);
-				return Array.isArray(parsed) ? parsed : [];
-			} catch (error) {
-				return [];
-			}
-		}
-
-		loginForm.addEventListener("submit", function (event) {
-			event.preventDefault();
-			errorText.style.display = "none";
-
-			const email = emailInput.value.trim().toLowerCase();
-			const password = passwordInput.value;
-			const account = getAccounts().find(function (item) {
-				return item.email === email;
-			});
-
-			if (!account || account.password !== password) {
-				errorText.style.display = "block";
-				passwordInput.focus();
-				return;
-			}
-
-			localStorage.setItem("ewaste_current_user", JSON.stringify(account));
-
-			if (account.role === "Admin Personnel") {
-				window.location.href = "admin.html";
-				return;
-			}
-
-			if (account.role === "Recycler") {
-				window.location.href = "recycler.html";
-				return;
-			}
-
-			window.location.href = "dashboard.html";
-		});
-	})();
-</script>
 </body>
 </html>
 

@@ -31,7 +31,7 @@
         <div class="card">
             <h2>Waste Request Form</h2>
 
-            <form id="waste-request-form" method="post" action="#" aria-label="Waste request form">
+            <form id="waste-request-form" method="post" action="WasteRequestServlet" aria-label="Waste request form">
                 <div class="container">
                     <div>
                         <label for="device-type">Select device type</label>
@@ -111,9 +111,9 @@
         <div id="recycler-rating-section" class="card" style="display: none;">
             <h2>Rate Recycler</h2>
             <p><small><i>You can rate the recycler after your request is completed.</i></small></p>
-            <form id="recycler-rating-form" method="post" action="#" aria-label="Recycler rating form">
+            <form id="recycler-rating-form" method="post" action="RecyclerRatingServlet" aria-label="Recycler rating form">
                 <label for="recycler-rating-value">Rating (1-5)</label>
-                <select id="recycler-rating-value" required>
+                <select id="recycler-rating-value" name="rating" required>
                     <option value="">Select rating</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -123,7 +123,7 @@
                 </select>
 
                 <label for="recycler-rating-comment">Comment (optional)</label>
-                <textarea id="recycler-rating-comment" rows="3" placeholder="Share your experience" style="width:100%;"></textarea>
+                <textarea id="recycler-rating-comment" name="comment" rows="3" placeholder="Share your experience" style="width:100%;"></textarea>
                 <br>
                 <button class="btn" type="submit">Submit Rating</button>
             </form>
@@ -145,7 +145,7 @@
         <div class="card">
             <h2>Find Recycler</h2>
             
-            <form id="recycler-search-form" method="get" action="#" aria-label="Recycler search form">
+            <form id="recycler-search-form" method="get" action="RecyclerSearchServlet" aria-label="Recycler search form">
                 <div class="container">
                     <div>
                         <label for="recycler-location">Location</label>

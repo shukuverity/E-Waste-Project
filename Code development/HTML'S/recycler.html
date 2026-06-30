@@ -26,23 +26,23 @@
 
         <div class="card">
             <h2>Facility Registration</h2>
-            <form id="registration-form" action="#" method="post">
+            <form id="registration-form" action="RecyclerRegistrationServlet" method="post">
                 <div class="grid-container">
                     <div>
                         <label for="facility-name">Company Name</label>
-                        <input id="facility-name" type="text" required>
+                        <input id="facility-name" name="companyName" type="text" required>
                     </div>
                     <div>
                         <label for="facility-location">Location</label>
-                        <input id="facility-location" type="text" placeholder="e.g. Nairobi" required>
+                        <input id="facility-location" name="location" type="text" placeholder="e.g. Nairobi" required>
                     </div>
                     <div>
                         <label for="nema-license">NEMA Certificate ID</label>
-                        <input id="nema-license" type="text" placeholder="NEMA-001" required>
+                        <input id="nema-license" name="nemaLicense" type="text" placeholder="NEMA-001" required>
                     </div>
                     <div>
                         <label for="recycler-type">Recycler Type</label>
-                        <select id="recycler-type" required>
+                        <select id="recycler-type" name="recyclerType" required>
                             <option value="All recyclers">All recyclers</option>
                             <option value="Household">Household</option>
                             <option value="Industrial">Industrial</option>
@@ -50,7 +50,7 @@
                     </div>
                     <div style="grid-column: 1 / -1;">
                         <label for="facility-phone">Contact Phone</label>
-                        <input id="facility-phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required>
+                        <input id="facility-phone" name="contactPhone" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required>
                     </div>
                 </div>
                 <div class="form-actions">
@@ -84,19 +84,19 @@
 
         <div class="card">
             <h2>Facility Profile Update</h2>
-            <form id="profile-form" action="#" method="post">
+            <form id="profile-form" action="RecyclerProfileServlet" method="post">
                 <div class="grid-container">
                     <div>
                         <label for="operating-hours">Operating Hours</label>
-                        <input id="operating-hours" type="text" placeholder="Mon-Sat 08:00-18:00" required>
+                        <input id="operating-hours" name="operatingHours" type="text" placeholder="Mon-Sat 08:00-18:00" required>
                     </div>
                     <div>
                         <label for="daily-capacity">Daily Capacity (kg)</label>
-                        <input id="daily-capacity" type="number" min="1" required>
+                        <input id="daily-capacity" name="dailyCapacityKg" type="number" min="1" required>
                     </div>
                     <div style="grid-column: 1 / -1;">
                         <label for="accepted-types">Accepted Waste Types</label>
-                        <input id="accepted-types" type="text" placeholder="Phones, Laptops, Batteries" required>
+                        <input id="accepted-types" name="acceptedWasteTypes" type="text" placeholder="Phones, Laptops, Batteries" required>
                     </div>
                 </div>
                 <button class="btn" type="submit">Update Profile</button>
